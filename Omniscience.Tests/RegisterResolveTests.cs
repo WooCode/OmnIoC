@@ -74,5 +74,20 @@ namespace Omniscience.Tests
             RegisterNamed();
             var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
         }
+
+        [Fact]
+        public void ResolveInstance()
+        {
+            RegisterInstance();
+            var testClass = OmnIOC.Default.Resolve<TestClass2>();
+        }
+
+        [Fact]
+        public void ResolveNamedInstance()
+        {
+            RegisterInstance();
+            RegisterNamedInstance();
+            var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
+        }
     }
 }

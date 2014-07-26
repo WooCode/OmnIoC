@@ -18,17 +18,7 @@ namespace Omniscience.Tests
         {
             public TestClass2(TestClass1 inner)
             {
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(x => x.IsAssignableFrom(x) && x.IsClass).ToList();
-                //.ForEach(t =>
-                //{
-                //    var name = t.Name.ToLower();
-                //    if (name.EndsWith("handler"))
-                //        name = name.Substring(0, name.Length - 7);
-
-                //    TinyIoCContainer.Current.Register(type, t, name);
-                //});
+               
             }
         }
 

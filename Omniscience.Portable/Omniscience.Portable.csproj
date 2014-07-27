@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.props" Condition="Exists('..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
@@ -18,7 +17,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
-    <NuGetPackageImportStamp>cf269dc9</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>d9e449f0</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,10 +40,6 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="FactoryContainer.cs" />
     <Compile Include="FuncContainer.cs" />
     <Compile Include="IFuncContainer.cs" />
@@ -59,10 +54,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.props'))" />
-    <Error Condition="!Exists('..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.targets'))" />
   </Target>
-  <Import Project="..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.targets" Condition="Exists('..\packages\OnBuild.PackageAssemblyForNuget.1.0.7\build\OnBuild.PackageAssemblyForNuget.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

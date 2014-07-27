@@ -12,8 +12,8 @@ var testClass = OmnIOC.Default.Resolve<TestClass2>();
 
 Named registrations
 ```
-OmnIOC.Default.RegisterNamed(new TestClass1(), "1");
-OmnIOC.Default.RegisterNamed(new TestClass2(OmnIOC.Default.Resolve<TestClass1>("1")), "2");
+OmnIOC.Default.RegisterNamed(o => new TestClass1(), "1");
+OmnIOC.Default.RegisterNamed(o => new TestClass2(o.Resolve<TestClass1>("1")), "2");
 var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
 ```
 

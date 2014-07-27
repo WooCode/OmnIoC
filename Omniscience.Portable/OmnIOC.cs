@@ -15,9 +15,6 @@ namespace Omniscience.Portable
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-        private readonly Dictionary<string, IFuncContainer> _namedCollection =
-            new Dictionary<string, IFuncContainer>();
-
         private readonly Dictionary<string, IFuncContainer> _typedCollection =
             new Dictionary<string, IFuncContainer>();
 
@@ -26,7 +23,10 @@ namespace Omniscience.Portable
             ThrowOnMissingType = true;
         }
 
-        public static OmnIOC Default { get { return DefaultContainer.Value; } }
+        public static OmnIOC Default
+        {
+            get { return DefaultContainer.Value; }
+        }
 
         /// <summary>
         ///     Should DiDay return default or throw when registration is missing for a type.
@@ -34,22 +34,25 @@ namespace Omniscience.Portable
         public bool ThrowOnMissingType { get; set; }
 
         /// <summary>
+        ///     Exposed to test project
+        /// </summary>
+        internal void Clear()
+        {
+            _typedCollection.Clear();
+        }
+
+        /// <summary>
         ///     Register factory for <see cref="T" />
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
-        /// <param name="name"></param>
-        public void Register<T>(Func<OmnIOC, T> factory, string name = null)
+        public void Register<T>(Func<OmnIOC, T> factory)
         {
             try
             {
                 _lock.EnterWriteLock();
                 var factoryContainer = new FactoryContainer<T>(factory);
                 _typedCollection[typeof (T).FullName] = factoryContainer;
-
-
-                if (name != null)
-                    _namedCollection[name] = factoryContainer;
             }
             finally
             {
@@ -58,21 +61,60 @@ namespace Omniscience.Portable
         }
 
         /// <summary>
+        ///     Register named factory for <see cref="T" />
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="factory"></param>
+        /// <param name="name"></param>
+        public void RegisterNamed<T>(Func<OmnIOC, T> factory, string name)
+        {
+            try
+            {
+                _lock.EnterWriteLock();
+                var factoryContainer = new FactoryContainer<T>(factory);
+                string key = FormatKey<T>(name);
+                _typedCollection[key] = factoryContainer;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
+        }
+
+
+        /// <summary>
         ///     Register instance
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
-        /// <param name="name"></param>
-        public void Register<T>(T instance, string name = null)
+        public void Register<T>(T instance)
         {
             try
             {
                 _lock.EnterWriteLock();
                 var instanceContainer = new InstanceContainer<T>(instance);
                 _typedCollection[typeof (T).FullName] = instanceContainer;
+            }
+            finally
+            {
+                _lock.ExitWriteLock();
+            }
+        }
 
-                if (name != null)
-                    _namedCollection[name] = instanceContainer;
+        /// <summary>
+        ///     Register named instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="name"></param>
+        public void RegisterNamed<T>(T instance, string name)
+        {
+            try
+            {
+                _lock.EnterWriteLock();
+                var instanceContainer = new InstanceContainer<T>(instance);
+                string key = FormatKey<T>(name);
+                _typedCollection[key] = instanceContainer;
             }
             finally
             {
@@ -96,13 +138,13 @@ namespace Omniscience.Portable
             try
             {
                 _lock.EnterReadLock();
-
                 IFuncContainer container;
-                if (_typedCollection.TryGetValue(type.FullName, out container) ||
-                    _namedCollection.TryGetValue(type.FullName, out container))
+                string key = name == null ? type.FullName : FormatKey<T>(name);
+
+                if (_typedCollection.TryGetValue(key, out container))
                 {
-                    var resolver = (FuncContainer<T>) container;
-                    return resolver.Get(this);
+                    var factory = (FuncContainer<T>) container;
+                    return factory.Get(this);
                 }
             }
             finally
@@ -114,6 +156,11 @@ namespace Omniscience.Portable
                 throw new Exception(string.Format("There is no type registered for {0}", type.FullName));
 
             return default(T);
+        }
+
+        private static string FormatKey<T>(string name)
+        {
+            return string.Format("{0}_{1}", typeof (T).FullName, name);
         }
     }
 }

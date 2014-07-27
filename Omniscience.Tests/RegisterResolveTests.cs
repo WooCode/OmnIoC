@@ -8,6 +8,7 @@ namespace Omniscience.Tests
         [Fact]
         public void Register()
         {
+            OmnIOC.Default.Clear();
             OmnIOC.Default.Register(o => new TestClass1());
             OmnIOC.Default.Register(o => new TestClass2(o.Resolve<TestClass1>()));
         }
@@ -15,13 +16,15 @@ namespace Omniscience.Tests
         [Fact]
         public void RegisterNamed()
         {
-            OmnIOC.Default.Register(o => new TestClass1(), "1");
-            OmnIOC.Default.Register(o => new TestClass2(o.Resolve<TestClass1>()), "2");
+            OmnIOC.Default.Clear();
+            OmnIOC.Default.RegisterNamed(o => new TestClass1(), "1");
+            OmnIOC.Default.RegisterNamed(o => new TestClass2(o.Resolve<TestClass1>("1")), "2");
         }
 
         [Fact]
         public void RegisterInstance()
         {
+            OmnIOC.Default.Clear();
             OmnIOC.Default.Register(new TestClass1());
             OmnIOC.Default.Register(new TestClass2(OmnIOC.Default.Resolve<TestClass1>()));
         }
@@ -29,8 +32,9 @@ namespace Omniscience.Tests
         [Fact]
         public void RegisterNamedInstance()
         {
-            OmnIOC.Default.Register(new TestClass1(), "1");
-            OmnIOC.Default.Register(new TestClass2(OmnIOC.Default.Resolve<TestClass1>()), "2");
+            OmnIOC.Default.Clear();
+            OmnIOC.Default.RegisterNamed(new TestClass1(), "1");
+            OmnIOC.Default.RegisterNamed(new TestClass2(OmnIOC.Default.Resolve<TestClass1>("1")), "2");
         }
 
         [Fact]
@@ -44,7 +48,6 @@ namespace Omniscience.Tests
         [Fact]
         public void ResolveNamed()
         {
-            Register();
             RegisterNamed();
             var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
             Assert.NotNull(testClass);
@@ -61,7 +64,6 @@ namespace Omniscience.Tests
         [Fact]
         public void ResolveNamedInstance()
         {
-            RegisterInstance();
             RegisterNamedInstance();
             var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
             Assert.NotNull(testClass);

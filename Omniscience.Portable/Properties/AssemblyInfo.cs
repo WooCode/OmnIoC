@@ -6,8 +6,8 @@ using System.Reflection;
 // associated with an assembly.
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("Omniscience.Portable")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("OmnIOC.Portable")]
+[assembly: AssemblyDescription("IOC'ish IOC..")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Omniscience.Portable")]

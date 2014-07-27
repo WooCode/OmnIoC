@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace Omniscience.Portable
@@ -12,23 +11,7 @@ namespace Omniscience.Portable
     public class OmnIOC
     {
         private static readonly Lazy<OmnIOC> DefaultContainer =
-            new Lazy<OmnIOC>(CreateDefault, LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private static OmnIOC CreateDefault()
-        {
-            return new OmnIOC();
-
-            if (AppDomainTypeProvider != null)
-            {
-                foreach (var type in AppDomainTypeProvider.GetTypes())
-                {
-                    
-
-                }
-            }
-        }
-
-        public static IAppDomainTypeProvider AppDomainTypeProvider { get; set; }
+            new Lazy<OmnIOC>(() => new OmnIOC(), LazyThreadSafetyMode.ExecutionAndPublication);
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
@@ -43,10 +26,7 @@ namespace Omniscience.Portable
             ThrowOnMissingType = true;
         }
 
-        public static OmnIOC Default
-        {
-            get { return DefaultContainer.Value; }
-        }
+        public static OmnIOC Default { get { return DefaultContainer.Value; } }
 
         /// <summary>
         ///     Should DiDay return default or throw when registration is missing for a type.
@@ -58,6 +38,7 @@ namespace Omniscience.Portable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
+        /// <param name="name"></param>
         public void Register<T>(Func<OmnIOC, T> factory, string name = null)
         {
             try
@@ -128,7 +109,7 @@ namespace Omniscience.Portable
             {
                 _lock.ExitReadLock();
             }
-            
+
             if (throwOnMissingType.Value)
                 throw new Exception(string.Format("There is no type registered for {0}", type.FullName));
 

@@ -1,27 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Omniscience.Portable;
+﻿using Omniscience.Portable;
 using Xunit;
 
 namespace Omniscience.Tests
 {
     public class RegisterResolveTests
     {
-        public class TestClass1
-        {
-             
-        }
-
-        public class TestClass2
-        {
-            public TestClass2(TestClass1 inner)
-            {
-               
-            }
-        }
-
         [Fact]
         public void Register()
         {
@@ -55,6 +38,7 @@ namespace Omniscience.Tests
         {
             Register();
             var testClass = OmnIOC.Default.Resolve<TestClass2>();
+            Assert.NotNull(testClass);
         }
 
         [Fact]
@@ -63,6 +47,7 @@ namespace Omniscience.Tests
             Register();
             RegisterNamed();
             var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
+            Assert.NotNull(testClass);
         }
 
         [Fact]
@@ -70,6 +55,7 @@ namespace Omniscience.Tests
         {
             RegisterInstance();
             var testClass = OmnIOC.Default.Resolve<TestClass2>();
+            Assert.NotNull(testClass);
         }
 
         [Fact]
@@ -78,6 +64,23 @@ namespace Omniscience.Tests
             RegisterInstance();
             RegisterNamedInstance();
             var testClass = OmnIOC.Default.Resolve<TestClass2>("2");
+            Assert.NotNull(testClass);
+        }
+
+        public class TestClass1
+        {
+        }
+
+        public class TestClass2
+        {
+// ReSharper disable NotAccessedField.Local
+            private readonly TestClass1 _inner;
+// ReSharper restore NotAccessedField.Local
+
+            public TestClass2(TestClass1 inner)
+            {
+                _inner = inner;
+            }
         }
     }
 }

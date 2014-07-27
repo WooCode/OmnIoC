@@ -39,7 +39,6 @@
   <ItemGroup>
     <Compile Include="FactoryContainer.cs" />
     <Compile Include="FuncContainer.cs" />
-    <Compile Include="IAppDomainProvider.cs" />
     <Compile Include="IFuncContainer.cs" />
     <Compile Include="InstanceContainer.cs" />
     <Compile Include="OmnIOC.cs" />

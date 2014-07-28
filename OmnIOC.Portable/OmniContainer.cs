@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Omniscience.Portable
+namespace OmnIOC.Portable
 {
     /// <summary>
     ///     Simple object factory / DiContainer
     ///     Implement custom methods in a partial file since any changes will be lost on update.
     /// </summary>
-    public class OmnIOC
+    public class OmniContainer
     {
-        private static readonly Lazy<OmnIOC> DefaultContainer =
-            new Lazy<OmnIOC>(() => new OmnIOC(), LazyThreadSafetyMode.ExecutionAndPublication);
+        private static readonly Lazy<OmniContainer> DefaultContainer =
+            new Lazy<OmniContainer>(() => new OmniContainer(), LazyThreadSafetyMode.ExecutionAndPublication);
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
         private readonly Dictionary<string, IFuncContainer> _typedCollection =
             new Dictionary<string, IFuncContainer>();
 
-        private OmnIOC()
+        private OmniContainer()
         {
             ThrowOnMissingType = true;
         }
 
-        public static OmnIOC Default
+        public static OmniContainer Default
         {
             get { return DefaultContainer.Value; }
         }
@@ -46,7 +46,7 @@ namespace Omniscience.Portable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
-        public void Register<T>(Func<OmnIOC, T> factory)
+        public void Register<T>(Func<OmniContainer, T> factory)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Omniscience.Portable
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
         /// <param name="name"></param>
-        public void RegisterNamed<T>(Func<OmnIOC, T> factory, string name)
+        public void RegisterNamed<T>(Func<OmniContainer, T> factory, string name)
         {
             try
             {

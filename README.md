@@ -1,6 +1,6 @@
-Master: [![Build status](https://ci.appveyor.com/api/projects/status/5xeeg6rp6sgas90o/branch/master)](https://ci.appveyor.com/project/CodeDux/omniscience/branch/master)
+Master: [![Build status](https://ci.appveyor.com/api/projects/status/5xeeg6rp6sgas90o/branch/master)](https://ci.appveyor.com/project/CodeDux/OmnIOC/branch/master)
 
-Develop: [![Build status](https://ci.appveyor.com/api/projects/status/5xeeg6rp6sgas90o/branch/develop)](https://ci.appveyor.com/project/CodeDux/omniscience/branch/develop)
+Develop: [![Build status](https://ci.appveyor.com/api/projects/status/5xeeg6rp6sgas90o/branch/develop)](https://ci.appveyor.com/project/CodeDux/OmnIOC/branch/develop)
 ## About
 ---
 IOC'ish IOC.. 

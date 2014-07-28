@@ -1,4 +1,4 @@
-﻿namespace Omniscience.Portable
+﻿namespace OmnIOC.Portable
 {
     public interface IFuncContainer
     {

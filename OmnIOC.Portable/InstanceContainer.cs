@@ -1,4 +1,4 @@
-﻿namespace Omniscience.Portable
+﻿namespace OmnIOC.Portable
 {
     /// <summary>
     ///     Container that holds the "factory" for a specific type/value.
@@ -13,7 +13,7 @@
             _instance = instance;
         }
 
-        public override T Get(OmnIOC container)
+        public override T Get(OmniContainer container)
         {
             return _instance;
         }

@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyDescription("IOC'ish IOC..")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Omniscience.Portable")]
+[assembly: AssemblyProduct("OmnIOC.Portable")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -29,4 +29,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("Omniscience.Tests")]
+[assembly: InternalsVisibleTo("OmnIOC.Tests")]

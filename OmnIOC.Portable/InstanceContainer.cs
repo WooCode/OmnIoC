@@ -13,7 +13,7 @@
             _instance = instance;
         }
 
-        public override T Get(OmniContainer container)
+        public override T Get(OmnIOCContainer container)
         {
             return _instance;
         }

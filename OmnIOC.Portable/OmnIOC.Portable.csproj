@@ -42,9 +42,8 @@
   <ItemGroup>
     <Compile Include="FactoryContainer.cs" />
     <Compile Include="FuncContainer.cs" />
-    <Compile Include="IFuncContainer.cs" />
     <Compile Include="InstanceContainer.cs" />
-    <Compile Include="OmniContainer.cs" />
+    <Compile Include="OmnIOCContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

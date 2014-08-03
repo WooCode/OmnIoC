@@ -1,4 +1,6 @@
-﻿using OmnIOC.Portable;
+﻿using System;
+using System.Threading;
+using OmnIOC.Portable;
 using Xunit;
 
 namespace OmnIOC.Tests
@@ -6,67 +8,60 @@ namespace OmnIOC.Tests
     public class RegisterResolveTests
     {
         [Fact]
-        public void Register()
+        public void Factory()
         {
-            OmniContainer.Default.Clear();
-            OmniContainer.Default.Register(o => new TestClass1());
-            OmniContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>()));
-        }
-
-        [Fact]
-        public void RegisterNamed()
-        {
-            OmniContainer.Default.Clear();
-            OmniContainer.Default.RegisterNamed(o => new TestClass1(), "1");
-            OmniContainer.Default.RegisterNamed(o => new TestClass2(o.Resolve<TestClass1>("1")), "2");
-        }
-
-        [Fact]
-        public void RegisterInstance()
-        {
-            OmniContainer.Default.Clear();
-            OmniContainer.Default.Register(new TestClass1());
-            OmniContainer.Default.Register(new TestClass2(OmniContainer.Default.Resolve<TestClass1>()));
-        }
-
-        [Fact]
-        public void RegisterNamedInstance()
-        {
-            OmniContainer.Default.Clear();
-            OmniContainer.Default.RegisterNamed(new TestClass1(), "1");
-            OmniContainer.Default.RegisterNamed(new TestClass2(OmniContainer.Default.Resolve<TestClass1>("1")), "2");
-        }
-
-        [Fact]
-        public void Resolve()
-        {
-            Register();
-            var testClass = OmniContainer.Default.Resolve<TestClass2>();
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.Register(o => new TestClass1());
+            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>()));
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>();
             Assert.NotNull(testClass);
+            Assert.NotNull(testClass.Inner);
         }
 
         [Fact]
-        public void ResolveNamed()
+        public void NamedFactory()
         {
-            RegisterNamed();
-            var testClass = OmniContainer.Default.Resolve<TestClass2>("2");
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.Register(o => new TestClass1(), "1");
+            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1")), "2");
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2");
             Assert.NotNull(testClass);
+            Assert.NotNull(testClass.Inner);
         }
 
         [Fact]
-        public void ResolveInstance()
+        public void Instance()
         {
-            RegisterInstance();
-            var testClass = OmniContainer.Default.Resolve<TestClass2>();
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.RegisterInstance(new TestClass1());
+            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>()));
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>();
             Assert.NotNull(testClass);
+            Assert.NotNull(testClass.Inner);
         }
 
         [Fact]
-        public void ResolveNamedInstance()
+        public void NamedInstance()
         {
-            RegisterNamedInstance();
-            var testClass = OmniContainer.Default.Resolve<TestClass2>("2");
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "1");
+            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>("1")), "2");
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2");
             Assert.NotNull(testClass);
+            Assert.NotNull(testClass.Inner);
+        }
+
+        [Fact]
+        public void RegisterInResolveShouldFail()
+        {
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.Register(o =>
+            {
+                o.Register(o2 => new TestClass1());
+                return new TestClass2(o.Resolve<TestClass1>());
+            });
+
+            Assert.Throws<LockRecursionException>(() => OmnIOCContainer.Default.Resolve<TestClass2>());
         }
 
         public class TestClass1
@@ -76,12 +71,12 @@ namespace OmnIOC.Tests
         public class TestClass2
         {
 // ReSharper disable NotAccessedField.Local
-            private readonly TestClass1 _inner;
+            public readonly TestClass1 Inner;
 // ReSharper restore NotAccessedField.Local
 
             public TestClass2(TestClass1 inner)
             {
-                _inner = inner;
+                Inner = inner;
             }
         }
     }

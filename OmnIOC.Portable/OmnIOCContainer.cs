@@ -15,7 +15,7 @@ namespace OmnIOC.Portable
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
 
-        private readonly Dictionary<string, object> _typesCollection = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _typesCollection = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
 
         private OmnIOCContainer()
         {

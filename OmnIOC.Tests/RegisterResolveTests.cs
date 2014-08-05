@@ -22,9 +22,9 @@ namespace OmnIOC.Tests
         public void NamedFactory()
         {
             OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.Register(o => new TestClass1(), "1");
-            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1")), "2");
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2");
+            OmnIOCContainer.Default.Register(o => new TestClass1(), "1a");
+            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1A")), "2X");
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2x");
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }
@@ -44,9 +44,9 @@ namespace OmnIOC.Tests
         public void NamedInstance()
         {
             OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "1");
-            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>("1")), "2");
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2");
+            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "1a");
+            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>("1A")), "2X");
+            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2x");
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }

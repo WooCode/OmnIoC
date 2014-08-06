@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace OmnIOC.Portable
@@ -111,6 +112,20 @@ namespace OmnIOC.Portable
                 throw new Exception(string.Format("There is no type registered for {0}", type.FullName));
 
             return default(T);
+        }
+
+        public IEnumerable<string> ResolveAll<T>()
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                var key = FormatKey<T>(string.Empty);
+                return _typesCollection.Where(t => t.Key.StartsWith(key, StringComparison.OrdinalIgnoreCase)).Select(t => t.Key.Replace(key,"")).ToList();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            } 
         }
 
         private static string FormatKey<T>(string name)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using OmnIOC.Portable;
 using Xunit;
@@ -27,6 +28,17 @@ namespace OmnIOC.Tests
             var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2x");
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
+        }
+
+        [Fact]
+        public void GetAllNamesForType()
+        {
+            OmnIOCContainer.Default.Clear();
+            OmnIOCContainer.Default.Register(o => new TestClass1(), "1a");
+            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1A")), "2X");
+            var factories = OmnIOCContainer.Default.ResolveAll<TestClass2>();
+            Assert.NotNull(factories);
+            Assert.NotNull(factories.First() == "2X");
         }
 
         [Fact]

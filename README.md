@@ -1,6 +1,4 @@
-Master: [![Build status](https://ci.appveyor.com/api/projects/status/99akspvgoqjt1n43/branch/develop)](https://ci.appveyor.com/project/WooCode/omniscience/branch/master)
-
-Develop: [![Build status](https://ci.appveyor.com/api/projects/status/99akspvgoqjt1n43/branch/develop)](https://ci.appveyor.com/project/WooCode/omniscience/branch/develop)
+[![Build status](https://ci.appveyor.com/api/projects/status/99akspvgoqjt1n43/branch/develop)](https://ci.appveyor.com/project/WooCode/omniscience/branch/develop)
 ## About
 ---
 IOC'ish IOC.. 

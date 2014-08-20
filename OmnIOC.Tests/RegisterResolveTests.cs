@@ -35,10 +35,13 @@ namespace OmnIOC.Tests
         {
             OmnIOCContainer.Default.Clear();
             OmnIOCContainer.Default.Register(o => new TestClass1(), "1a");
-            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1A")), "2X");
-            var factories = OmnIOCContainer.Default.ResolveAll<TestClass2>();
-            Assert.NotNull(factories);
-            Assert.NotNull(factories.First() == "2X");
+            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "2a");
+            var names = OmnIOCContainer.Default.ResolveAllNames<TestClass1>();
+            Assert.NotNull(names);
+            var namesList = names.ToList();
+            Assert.True(namesList.Count == 2);
+            Assert.Contains("1a",namesList);
+            Assert.Contains("2a", namesList);
         }
 
         [Fact]

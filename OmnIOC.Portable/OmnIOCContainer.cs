@@ -95,7 +95,7 @@ namespace OmnIOC.Portable
             {
                 _lock.EnterReadLock();
                 object container;
-                var key = name == null ? type.FullName : FormatKey<T>(name);
+                var key = FormatKey<T>(name);
 
                 if (_typesCollection.TryGetValue(key, out container))
                 {
@@ -114,7 +114,12 @@ namespace OmnIOC.Portable
             return default(T);
         }
 
-        public IEnumerable<string> ResolveAll<T>()
+        /// <summary>
+        /// Resolve all names that <see cref="T"/> is registered under
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IEnumerable<string> ResolveAllNames<T>()
         {
             try
             {
@@ -128,11 +133,11 @@ namespace OmnIOC.Portable
             } 
         }
 
-        private static string FormatKey<T>(string name)
+        private static string FormatKey<T>(string name = "")
         {
             var typeName = typeof (T).FullName;
 
-            return name == null ? typeName : string.Format("{0}_{1}", typeName, name);
+            return string.Format("{0}_{1}", typeName, name);
         }
     }
 }

@@ -1,6 +1,5 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/99akspvgoqjt1n43/branch/develop)](https://ci.appveyor.com/project/WooCode/omniscience/branch/develop)
-## About
----
+## Omniscience [![Build status](https://ci.appveyor.com/api/projects/status/99akspvgoqjt1n43/branch/develop)](https://ci.appveyor.com/project/WooCode/omniscience/branch/develop)
+
 IOC'ish IOC.. 
 
 Simple example

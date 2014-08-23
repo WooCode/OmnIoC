@@ -8,13 +8,17 @@ namespace OmnIOC.Tests
 {
     public class RegisterResolveTests
     {
+        public RegisterResolveTests()
+        {
+            OmnIoc.Clear();
+        }
+
         [Fact]
         public void Factory()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.Register(o => new TestClass1());
-            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>()));
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>();
+            OmnIoc.Set(() =>  new TestClass1());
+            OmnIoc.Set(() =>  new TestClass2(OmnIoc.Get<TestClass1>()));
+            var testClass = OmnIoc.Get<TestClass2>();
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }
@@ -22,10 +26,9 @@ namespace OmnIOC.Tests
         [Fact]
         public void NamedFactory()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.Register(o => new TestClass1(), "1a");
-            OmnIOCContainer.Default.Register(o => new TestClass2(o.Resolve<TestClass1>("1A")), "2X");
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2x");
+            OmnIoc.Set(() =>  new TestClass1(), "1a");
+            OmnIoc.Set(() =>  new TestClass2(OmnIoc.Get<TestClass1>("1A")), "2X");
+            var testClass = OmnIoc.Get<TestClass2>("2x");
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }
@@ -33,24 +36,21 @@ namespace OmnIOC.Tests
         [Fact]
         public void GetAllNamesForType()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.Register(o => new TestClass1(), "1a");
-            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "2a");
-            var names = OmnIOCContainer.Default.ResolveAllNames<TestClass1>();
+            OmnIoc.Set(() =>  new TestClass1(), "1a");
+            OmnIoc.Set(new TestClass1(), "2a");
+            var names = OmnIoc.GetAllTuples<TestClass1>();
             Assert.NotNull(names);
-            var namesList = names.ToList();
-            Assert.True(namesList.Count == 2);
-            Assert.Contains("1a",namesList);
-            Assert.Contains("2a", namesList);
+            Assert.True(names.Count == 2);
+            Assert.Contains("1a", names.Keys);
+            Assert.Contains("2a", names.Keys);
         }
 
         [Fact]
         public void Instance()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.RegisterInstance(new TestClass1());
-            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>()));
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>();
+            OmnIoc.Set(new TestClass1());
+            OmnIoc.Set(new TestClass2(OmnIoc.Get<TestClass1>()));
+            var testClass = OmnIoc.Get<TestClass2>();
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }
@@ -58,25 +58,27 @@ namespace OmnIOC.Tests
         [Fact]
         public void NamedInstance()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.RegisterInstance(new TestClass1(), "1a");
-            OmnIOCContainer.Default.RegisterInstance(new TestClass2(OmnIOCContainer.Default.Resolve<TestClass1>("1A")), "2X");
-            var testClass = OmnIOCContainer.Default.Resolve<TestClass2>("2x");
+            OmnIoc.Set(new TestClass1(), "1a");
+            OmnIoc.Set(new TestClass2(OmnIoc.Get<TestClass1>("1A")), "2X");
+            var testClass = OmnIoc.Get<TestClass2>("2x");
             Assert.NotNull(testClass);
             Assert.NotNull(testClass.Inner);
         }
 
         [Fact]
-        public void RegisterInResolveShouldFail()
+        public void ResolveAll()
         {
-            OmnIOCContainer.Default.Clear();
-            OmnIOCContainer.Default.Register(o =>
-            {
-                o.Register(o2 => new TestClass1());
-                return new TestClass2(o.Resolve<TestClass1>());
-            });
+            // Given
+            Factory();
+            NamedFactory();
 
-            Assert.Throws<LockRecursionException>(() => OmnIOCContainer.Default.Resolve<TestClass2>());
+            // Then
+            var all = OmnIoc.GetAll<TestClass2>().ToList();
+
+            // Should
+            Assert.Equal(all.Count(),2);
+            Assert.True(all.All(t => t.Inner != null));
+            Assert.False(all.First().Inner == all.Last().Inner);
         }
 
         public class TestClass1

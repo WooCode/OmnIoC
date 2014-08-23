@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace OmnIOC.Portable
 {
@@ -9,36 +8,27 @@ namespace OmnIOC.Portable
     ///     Simple object factory / DiContainer
     ///     Implement custom methods in a partial file since any changes will be lost on update.
     /// </summary>
-    public class OmnIOCContainer
+    public static class OmnIoc
     {
-        private static readonly Lazy<OmnIOCContainer> DefaultContainer =
-            new Lazy<OmnIOCContainer>(() => new OmnIOCContainer(), LazyThreadSafetyMode.ExecutionAndPublication);
-
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
-        private readonly Dictionary<string, object> _typesCollection = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
-        private OmnIOCContainer()
+        /// <summary>
+        ///     Resolve all names that <see cref="T" /> is registered under
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IEnumerable<T> GetAll<T>()
         {
-            ThrowOnMissingType = true;
+            return TypeContainer<T>.Container.Values.Select(f => f()).ToList();
         }
 
-        public static OmnIOCContainer Default
-        {
-            get { return DefaultContainer.Value; }
-        }
+        internal static event EventHandler ClearAll = (sender, args) => { };
 
         /// <summary>
-        ///     Should DiDay return default or throw when registration is missing for a type.
+        ///     Clear all registrations
         /// </summary>
-        public bool ThrowOnMissingType { get; set; }
-
-        /// <summary>
-        ///     Exposed to test project
-        /// </summary>
-        internal void Clear()
+        public static void Clear()
         {
-            _typesCollection.Clear();
+            var handler = ClearAll;
+            if (handler != null) handler(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -46,9 +36,16 @@ namespace OmnIOC.Portable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
-        public void Register<T>(Func<OmnIOCContainer, T> factory, string name = null)
+        /// <param name="name"></param>
+        public static void Set<T>(Func<T> factory, string name = null)
         {
-            SetType<T>(name, new FactoryContainer<T>(factory));
+            if (name == null)
+            {
+                TypeContainer<T>.Main = factory;
+                TypeContainer<T>.Container[string.Empty] = factory;
+            }
+            else
+                TypeContainer<T>.Container[name] = factory;
         }
 
         /// <summary>
@@ -56,88 +53,70 @@ namespace OmnIOC.Portable
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
-        public void RegisterInstance<T>(T instance, string name = null)
+        /// <param name="name"></param>
+        public static void Set<T>(T instance, string name = null)
         {
-            SetType<T>(name, new InstanceContainer<T>(instance));
+            Set(() => instance, name);
         }
 
-        private void SetType<T>(string name, object factoryContainer)
+        /// <summary>
+        ///     Register instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TR"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="singleton"></param>
+        public static void Set<T, TR>(string name = null, bool singleton = false) where TR : T, new()
         {
-            if(_lock.IsReadLockHeld)
-                throw new LockRecursionException("Can't register while resolving.");
+            if (singleton)
+                Set<T>(new TR());
+            else
+                Set<T>(() => new TR(), name);
 
-            var key = FormatKey<T>(name);
-            try
-            {
-                _lock.EnterWriteLock();
-                _typesCollection[key] = factoryContainer;
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
-            }
         }
 
+        /// <summary>
+        ///     Resolve named implementation of <see cref="T" />
+        /// </summary>
+        /// <typeparam name="T">Type to be resolved</typeparam>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static T Get<T>(string name)
+        {
+            return TypeContainer<T>.Container[name]();
+        }
         /// <summary>
         ///     Resolve implementation of <see cref="T" />
         /// </summary>
         /// <typeparam name="T">Type to be resolved</typeparam>
-        /// <param name="name"></param>
-        /// <param name="throwOnMissingType">Overrides ThrowOnMissingType property</param>
         /// <returns></returns>
-        public T Resolve<T>(string name = null, bool? throwOnMissingType = null)
+        public static T Get<T>()
         {
-            if (!throwOnMissingType.HasValue)
-                throwOnMissingType = ThrowOnMissingType;
-
-            var type = typeof (T);
-            try
-            {
-                _lock.EnterReadLock();
-                object container;
-                var key = FormatKey<T>(name);
-
-                if (_typesCollection.TryGetValue(key, out container))
-                {
-                    var factory = (FuncContainer<T>) container;
-                    return factory.Get(this);
-                }
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            }
-
-            if (throwOnMissingType.Value)
-                throw new Exception(string.Format("There is no type registered for {0}", type.FullName));
-
-            return default(T);
+            return TypeContainer<T>.Main();
         }
-
+            
         /// <summary>
-        /// Resolve all names that <see cref="T"/> is registered under
+        ///     Resolve all names that <see cref="T" /> is registered under
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IEnumerable<string> ResolveAllNames<T>()
+        public static Dictionary<string, Func<T>> GetAllTuples<T>()
         {
-            try
-            {
-                _lock.EnterReadLock();
-                var key = FormatKey<T>(string.Empty);
-                return _typesCollection.Where(t => t.Key.StartsWith(key, StringComparison.OrdinalIgnoreCase)).Select(t => t.Key.Replace(key,"")).ToList();
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            } 
+            return TypeContainer<T>.Container.ToDictionary(t => t.Key, t => t.Value, StringComparer.OrdinalIgnoreCase);
         }
 
-        private static string FormatKey<T>(string name = "")
+        private static class TypeContainer<T>
         {
-            var typeName = typeof (T).FullName;
-
-            return string.Format("{0}_{1}", typeName, name);
+            public static readonly Dictionary<string, Func<T>> Container = new Dictionary<string, Func<T>>(StringComparer.OrdinalIgnoreCase);
+            /// <summary>
+            ///     The main registration (unamed registration or first named registration)
+            /// </summary>
+            public static Func<T> Main = () => Container.Count > 0 ? Container.First().Value() : default(T);
+            
+            static TypeContainer()
+            {
+                ClearAll += (sender, args) => Container.Clear();
+            }
         }
     }
 }

@@ -41,7 +41,10 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="OmnIoc_Generic.cs" />
+    <Compile Include="IOmnIoc.cs" />
     <Compile Include="OmnIoc.cs" />
+    <Compile Include="OmnIoc_Reflection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

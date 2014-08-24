@@ -43,11 +43,11 @@ namespace OmnIOC.Portable
     /// </summary>
     public static class OmnIoc<RegistrationType>
     {
-        private static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+        internal static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         internal static readonly object SyncLock = new object();
 
         /// <summary>
-        ///     The main registration (unamed registration) or default(<see cref="RegistrationType" />)
+        ///     The main registration (unamed registration) or default of (<see cref="RegistrationType" />)
         /// </summary>
         public static Func<RegistrationType> Get = () => default(RegistrationType);
 

@@ -13,6 +13,11 @@ Portable Class Library Ioc that is **fast** and works in
 PM> Install-Package OmnIOC.Portable
 ```
 
+**Status**
+
+- Master [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/master)](https://ci.appveyor.com/project/WooCode/omnioc/branch/master)
+- Develop [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/omnioc/branch/develop)
+
 **Current features**
 
 - Nongeneric register/resolve (set/get)

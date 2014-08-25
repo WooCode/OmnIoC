@@ -1,18 +1,33 @@
-## OmnIoc.Portable
-
+OmnIoc
+===
 Portable Class Library Ioc that is **fast** and works in
 
 1. .Net Framework 4+
 2. Windows Store Apps
 3. Windows Phone 8.1
 
-### Examples of the generic version (generic resolve is much more performant than the type overloads)
+**OmnIoc** is very much in development and should not be seen as production-ready
+
+**Current features**
+
+- Generic register/resolve (set/get)
+- Named registrations/resolves
+- Resolve multiple registrations of type as IEnumerable< T >
+
+**Planned features**
+
+- Attribute based registration/discovery
+- Auto resolve constructor parameters
+
+Examples of the generic version
+=====
+_Generic resolve is much more performant than the type overloads_
 ```csharp
 // Singleton with empty constructor
-OmnIoc<ISingleton>.Set<Singleton>(OmnIoc.Reuse.Singleton);
+OmnIoc<ISingleton>.Set<Singleton>(IocReuse.Singleton);
 
 // Transient with empty constructor
-OmnIoc<ISingleton>.Set<Singleton>(OmnIoc.Reuse.Multiple);
+OmnIoc<ISingleton>.Set<Singleton>(IocReuse.Multiple);
 
 // Register multiple singletons with constructor under different names
 OmnIoc<ISimpleAdapter>.Set(new SimpleAdapterOne(1), "1");
@@ -44,7 +59,8 @@ var namedCombined = OmnIoc<ISimpleAdapter>.Named("1");
 var allCombined = OmnIoc<ISimpleAdapter>.All();
 ```
 
-### Performance comparison
+Performance comparison
+=====
 ![Imgur](http://i.imgur.com/IcEmlU2.png)
 The values are from using [this](https://github.com/danielpalme/IocPerformance) performance test with the latest versions of all Ioc's and added adapter for OmnIoc
 

@@ -12,28 +12,7 @@ namespace OmnIoc.Portable
     /// </summary>
     public sealed class OmnIoc<RegistrationType> : IOmnIoc
     {
-        private static Dictionary<string, Func<RegistrationType>> _namedCollection;
-        private static readonly object _syncLock = new object();
-
-        /// <summary>
-        ///     The main registration (unamed registration) or default of (<see cref="RegistrationType" />)
-        /// </summary>
-        public static Func<RegistrationType> Get = () => default(RegistrationType);
-
-        static OmnIoc()
-        {
-            OmnIoc.Instances[typeof (RegistrationType)] = new OmnIoc<RegistrationType>();
-            OmnIoc.ClearAll += (sender, args) =>
-            {
-                lock (_syncLock)
-                {
-                    _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-                    Get = () => default(RegistrationType);
-                }
-            };
-
-            _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-        }
+        #region IOmnIoc members
 
         object IOmnIoc.Get()
         {
@@ -46,7 +25,7 @@ namespace OmnIoc.Portable
         }
 
         /// <summary>
-        /// Set implementation type for <see cref="RegistrationType"/> with name 
+        ///     Set implementation type for <see cref="RegistrationType" /> with name
         /// </summary>
         /// <param name="implementationType"></param>
         /// <param name="reuse"></param>
@@ -69,7 +48,32 @@ namespace OmnIoc.Portable
 
         IEnumerable<object> IOmnIoc.All()
         {
-            return _namedCollection.Values.Select(f => (object)f());
+            return _namedCollection.Values.Select(f => (object) f());
+        }
+
+        #endregion
+
+        private static Dictionary<string, Func<RegistrationType>> _namedCollection;
+        private static readonly object _syncLock = new object();
+
+        /// <summary>
+        ///     The main registration (unamed registration) or default of (<see cref="RegistrationType" />)
+        /// </summary>
+        public static Func<RegistrationType> Get = () => default(RegistrationType);
+
+        static OmnIoc()
+        {
+            OmnIoc.Instances[typeof (RegistrationType)] = new OmnIoc<RegistrationType>();
+            OmnIoc.ClearAll += (sender, args) =>
+            {
+                lock (_syncLock)
+                {
+                    _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+                    Get = () => default(RegistrationType);
+                }
+            };
+
+            _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -100,7 +104,7 @@ namespace OmnIoc.Portable
                     Get = factory;
                     name = string.Empty;
                 }
-                var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection,StringComparer.OrdinalIgnoreCase);
+                var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection, StringComparer.OrdinalIgnoreCase);
                 newCollection[name] = factory;
                 _namedCollection = newCollection;
             }

@@ -25,7 +25,8 @@ Portable Class Library Ioc that is **fast** and works in
 Performance comparison
 =====
 ![Imgur](http://i.imgur.com/IcEmlU2.png)
-The values are from using [this](https://github.com/danielpalme/IocPerformance) performance test with the latest versions of all Ioc's and added adapter for OmnIoc
+The values are from using [this](https://github.com/danielpalme/IocPerformance) performance test with the latest versions of all Ioc's and added adapter for OmnIoc.
+Also modified adapters to use generics where possible since OmnIoc is generic in it's core and not be unfair to other Iocs.
 
 **Here are all comparisons / stats including Iocs that didn't reach low enough values to be included in the graph**
 

@@ -20,45 +20,7 @@ Portable Class Library Ioc that is **fast** and works in
 - Attribute based registration/discovery
 - Auto resolve constructor parameters
 
-Examples of the generic version
-=====
-_Generic resolve is much more performant than the type overloads_
-```csharp
-// Singleton with empty constructor
-OmnIoc<ISingleton>.Set<Singleton>(IocReuse.Singleton);
-
-// Transient with empty constructor
-OmnIoc<ISingleton>.Set<Singleton>(IocReuse.Multiple);
-
-// Register multiple singletons with constructor under different names
-OmnIoc<ISimpleAdapter>.Set(new SimpleAdapterOne(1), "1");
-OmnIoc<ISimpleAdapter>.Set(new SimpleAdapterTwo(2), "2");
-
-// Register multiple transient with constructor under different names
-OmnIoc<ISimpleAdapter>.Set(() => new SimpleAdapterThree(3), "3");
-OmnIoc<ISimpleAdapter>.Set(() => new SimpleAdapterFour(4), "4");
-
-// Transient with constructor parameters
-OmnIoc<ICombined>.Set(() => new Combined( 
-                                          OmnIoc<ISingleton>.Get(),
-                                          OmnIoc<ITransient>.Get()
-                                          ));
-                                          
-// Transient with IEnumerable<T> constructor parameter
-OmnIoc.Set(() => new ImportMultiple(OmnIoc<ISimpleAdapter>.All()));
-
-// Transient with properties
-OmnIoc.Set<ISubObject>(() => new SubObject { Service = OmnIoc<IService>.Get() });
-
-// Resolve
-var combined = OmnIoc<ICombined>.Get();
-
-// Resolve named
-var namedCombined = OmnIoc<ISimpleAdapter>.Named("1");
-
-// Resolve all as IEnumerable<T>
-var allCombined = OmnIoc<ISimpleAdapter>.All();
-```
+[Example code](https://github.com/WooCode/OmnIoc/wiki)
 
 Performance comparison
 =====

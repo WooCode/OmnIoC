@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmnIoc.Portable", "OmnIoc.Portable\OmnIoc.Portable.csproj", "{6F44EBA2-793C-415A-AD10-6670DCF032E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmnIoC.Portable", "OmnIoC.Portable\OmnIoC.Portable.csproj", "{6F44EBA2-793C-415A-AD10-6670DCF032E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmnIoc.Tests", "OmnIoc.Tests\OmnIoc.Tests.csproj", "{15AB6567-B31D-4A9C-B925-FBCB05EB1413}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OmnIoC.Tests", "OmnIoC.Tests\OmnIoC.Tests.csproj", "{15AB6567-B31D-4A9C-B925-FBCB05EB1413}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3ACAAEF4-A368-4470-9FE9-433CCD0E7AB0}"
 	ProjectSection(SolutionItems) = preProject

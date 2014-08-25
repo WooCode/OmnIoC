@@ -1,6 +1,6 @@
-﻿namespace OmnIoc.Portable
+﻿namespace OmnIoC.Portable
 {
-    public enum IocReuse
+    public enum Reuse
     {
         Multiple,
         Singleton

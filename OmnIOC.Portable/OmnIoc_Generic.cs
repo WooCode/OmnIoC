@@ -5,21 +5,21 @@ using System.Linq;
 // ReSharper disable InconsistentNaming
 // ReSharper disable StaticFieldInGenericType
 
-namespace OmnIoc.Portable
+namespace OmnIoC.Portable
 {
     /// <summary>
     ///     Generic container that holds registrations for type(s)
     /// </summary>
-    public sealed class OmnIoc<RegistrationType> : IOmnIoc
+    public sealed class OmnIoC<RegistrationType> : IOmnIoC
     {
-        #region IOmnIoc members
+        #region IOmnIoC members
 
-        object IOmnIoc.Get()
+        object IOmnIoC.Get()
         {
             return Get();
         }
 
-        object IOmnIoc.GetNamed(string name)
+        object IOmnIoC.GetNamed(string name)
         {
             return GetNamed(name);
         }
@@ -30,14 +30,14 @@ namespace OmnIoc.Portable
         /// <param name="implementationType"></param>
         /// <param name="reuse"></param>
         /// <param name="name"></param>
-        void IOmnIoc.Set(Type implementationType, IocReuse reuse, string name)
+        void IOmnIoC.Set(Type implementationType, Reuse reuse, string name)
         {
             switch (reuse)
             {
-                case IocReuse.Multiple:
+                case Reuse.Multiple:
                     Set(() => (RegistrationType) Activator.CreateInstance(implementationType), name);
                     break;
-                case IocReuse.Singleton:
+                case Reuse.Singleton:
                     var instance = (RegistrationType) Activator.CreateInstance(implementationType);
                     Set(() => instance, name);
                     break;
@@ -46,7 +46,7 @@ namespace OmnIoc.Portable
             }
         }
 
-        IEnumerable<object> IOmnIoc.All()
+        IEnumerable<object> IOmnIoC.All()
         {
             return _namedCollection.Values.Select(f => (object) f());
         }
@@ -61,10 +61,10 @@ namespace OmnIoc.Portable
         /// </summary>
         public static Func<RegistrationType> Get = () => default(RegistrationType);
 
-        static OmnIoc()
+        static OmnIoC()
         {
-            OmnIoc.Instances[typeof (RegistrationType)] = new OmnIoc<RegistrationType>();
-            OmnIoc.ClearAll += (sender, args) =>
+            OmnIoC.Instances[typeof (RegistrationType)] = new OmnIoC<RegistrationType>();
+            OmnIoC.ClearAll += (sender, args) =>
             {
                 lock (_syncLock)
                 {
@@ -121,9 +121,9 @@ namespace OmnIoc.Portable
         /// <summary>
         ///     Register instance
         /// </summary>
-        public static void Set<ImplementationType>(IocReuse reuse = IocReuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
+        public static void Set<ImplementationType>(Reuse reuse = Reuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
         {
-            if (reuse == IocReuse.Singleton)
+            if (reuse == Reuse.Singleton)
                 Set(new ImplementationType());
             else
                 Set(() => new ImplementationType(), name);

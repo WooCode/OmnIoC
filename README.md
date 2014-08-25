@@ -1,4 +1,4 @@
-OmnIoc
+OmnIoC
 ===
 Portable Class Library Ioc that is **fast** and works in
 
@@ -6,17 +6,17 @@ Portable Class Library Ioc that is **fast** and works in
 2. Windows Store Apps
 3. Windows Phone 8.1
 
-**OmnIoc** is very much in development and should not be seen as production-ready
+**OmnIoC** is very much in development and should not be seen as production-ready
 
 **Install**
 ```
-PM> Install-Package OmnIoc.Portable
+PM> Install-Package OmnIoC.Portable
 ```
 
 **Status**
 
-- Master [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/master)](https://ci.appveyor.com/project/WooCode/omnioc/branch/master)
-- Develop [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/omnioc/branch/develop)
+- Master [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/master)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/master)
+- Develop [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/develop)
 
 **Current features**
 
@@ -30,13 +30,13 @@ PM> Install-Package OmnIoc.Portable
 - Attribute based registration/discovery
 - Auto resolve constructor parameters
 
-[Example code](https://github.com/WooCode/OmnIoc/wiki)
+[Example code](https://github.com/WooCode/OmnIoC/wiki)
 
 Performance comparison
 =====
 ![Imgur](http://i.imgur.com/IcEmlU2.png)
-The values are from using [this](https://github.com/danielpalme/IocPerformance) performance test with the latest versions of all Ioc's and added adapter for OmnIoc.
-Also modified adapters to use generics where possible since OmnIoc is generic in it's core and not be unfair to other Iocs.
+The values are from using [this](https://github.com/danielpalme/IocPerformance) performance test with the latest versions of all Ioc's and added adapter for OmnIoC.
+Also modified adapters to use generics where possible since OmnIoC is generic in it's core and not be unfair to other Iocs.
 
 **Here are all comparisons / stats including Iocs that didn't reach low enough values to be included in the graph**
 
@@ -49,7 +49,7 @@ Lower is better and **bold values indicate best in test**
 
 |**Container**|**Singleton**|**Transient**|**Combined**|**Complex**|
 |:------------|------------:|------------:|-----------:|----------:|
-|**OmnIoc 0.0.18**|**29**<br/>**37**|**40**<br/>**56**|**54**<br/>**80**|**102**<br/>**82**|
+|**OmnIoC 0.0.18**|**29**<br/>**37**|**40**<br/>**56**|**54**<br/>**80**|**102**<br/>**82**|
 |**[Caliburn.Micro 1.5.2](https://github.com/Caliburn-Micro/Caliburn.Micro)**|453<br/>312|549<br/>330|1508<br/>881|6460<br/>3927|
 |**[Catel 3.9.0](http://www.catelproject.com)**|375<br/>385|3620<br/>4131|11233<br/>10056|24933<br/>28175|
 |**[DryIoc 1.3.1](https://bitbucket.org/dadhi/dryioc)**|61<br/>56|70<br/>70|84<br/>95|109<br/>92|

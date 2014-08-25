@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using OmnIoc.Portable;
+using OmnIoC.Portable;
 using Xunit;
 
 // ReSharper disable InconsistentNaming
-namespace OmnIoc.Tests
+namespace OmnIoC.Tests
 {
     public class NonGenericEmptyConstructor
     {
@@ -13,19 +13,19 @@ namespace OmnIoc.Tests
 
         public NonGenericEmptyConstructor()
         {
-            OmnIoc.Portable.OmnIoc.Clear();
+            OmnIoC.Portable.OmnIoC.Clear();
         }
 
         [Fact]
         public void LoadAttributes()
         {
             // Register
-            OmnIoc.Portable.OmnIoc.LoadAll(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
+            OmnIoC.Portable.OmnIoC.LoadAll(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
 
             // Resolve
-            var test1 = OmnIoc.Portable.OmnIoc.GetNamed(typeof (AttributeTestClass), "testOne");
-            var test2 = OmnIoc.Portable.OmnIoc.GetNamed(typeof(AttributeTestClass), "testTwo");
-            var test3 = OmnIoc.Portable.OmnIoc.GetNamed(typeof(AttributeTestClass), "testTwo");
+            var test1 = OmnIoC.Portable.OmnIoC.GetNamed(typeof (AttributeTestClass), "testOne");
+            var test2 = OmnIoC.Portable.OmnIoC.GetNamed(typeof(AttributeTestClass), "testTwo");
+            var test3 = OmnIoC.Portable.OmnIoC.GetNamed(typeof(AttributeTestClass), "testTwo");
 
             // Assert
             Assert.NotNull(test1);
@@ -41,11 +41,11 @@ namespace OmnIoc.Tests
         public void SetTransient()
         {
             // Register
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType);
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType);
 
             // Resolve
-            var test1 = (TestClass1)OmnIoc.Portable.OmnIoc.Get(_registrationType);
-            var test2 = (TestClass1)OmnIoc.Portable.OmnIoc.Get(_registrationType);
+            var test1 = (TestClass1)OmnIoC.Portable.OmnIoC.Get(_registrationType);
+            var test2 = (TestClass1)OmnIoC.Portable.OmnIoC.Get(_registrationType);
 
             // Assert
             Assert.NotNull(test1);
@@ -57,11 +57,11 @@ namespace OmnIoc.Tests
         public void SetSingleton()
         {
             // Register
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, IocReuse.Singleton);
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, Reuse.Singleton);
 
             // Resolve
-            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType);
-            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType);
+            var test1 = (ITestClass)OmnIoC.Portable.OmnIoC.Get(_registrationType);
+            var test2 = (ITestClass)OmnIoC.Portable.OmnIoC.Get(_registrationType);
 
             // Assert
             Assert.NotNull(test1);
@@ -73,14 +73,14 @@ namespace OmnIoc.Tests
         public void SetManyTransient()
         {
             // Register
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType,name:"test1");
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test2");
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test3");
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType,name:"test1");
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, name: "test2");
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, name: "test3");
 
             // Resolve
-            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
-            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
-            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
+            var test1 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test1");
+            var test2 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test2");
+            var test3 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test3");
 
             // Assert
             Assert.NotNull(test1);
@@ -95,21 +95,21 @@ namespace OmnIoc.Tests
         public void SetManySingleton()
         {
             // Register
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test1", iocReuse: IocReuse.Singleton);
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test2", iocReuse: IocReuse.Singleton);
-            OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test3", iocReuse: IocReuse.Singleton);
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, name: "test1", reuse: Reuse.Singleton);
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, name: "test2", reuse: Reuse.Singleton);
+            OmnIoC.Portable.OmnIoC.Set(_registrationType, _implementationType, name: "test3", reuse: Reuse.Singleton);
 
             // Resolve
-            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
-            var test1_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
+            var test1 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test1");
+            var test1_2 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test1");
 
-            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
-            var test2_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
+            var test2 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test2");
+            var test2_2 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test2");
 
-            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
-            var test3_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
+            var test3 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test3");
+            var test3_2 = (ITestClass)OmnIoC.Portable.OmnIoC.GetNamed(_registrationType, "test3");
 
-            var all = OmnIoc<ITestClass>.All();
+            var all = OmnIoC<ITestClass>.All();
 
             // Assert
             Assert.NotNull(test1);

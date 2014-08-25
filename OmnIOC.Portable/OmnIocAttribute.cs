@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace OmnIoc.Portable
+namespace OmnIoC.Portable
 {
     /// <summary>
     /// <remarks>Internal for now since it's not complete</remarks>
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    internal class OmnIocAttribute : Attribute
+    internal class OmnIoCAttribute : Attribute
     {
         public string Name { get; set; }
-        public IocReuse Reuse { get; set; }
+        public Reuse Reuse { get; set; }
 
-        public OmnIocAttribute()
+        public OmnIoCAttribute()
         {
             Name = null;
         }
@@ -21,10 +21,10 @@ namespace OmnIoc.Portable
     /// <remarks>Internal for now since it's not complete</remarks>
     /// </summary>
     [AttributeUsage(AttributeTargets.Constructor, AllowMultiple = false)]
-    internal class OmnIocConstructorAttribute : Attribute
+    internal class OmnIoCConstructorAttribute : Attribute
     {
         /// <summary>
-        /// Name that matches the name of one <see cref="OmnIocAttribute"/> attached to the class
+        /// Name that matches the name of one <see cref="OmnIoCAttribute"/> attached to the class
         /// </summary>
         public string Name { get; set; }
     }

@@ -8,8 +8,8 @@
     <ProjectGuid>{6F44EBA2-793C-415A-AD10-6670DCF032E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OmnIoc.Portable</RootNamespace>
-    <AssemblyName>OmnIoc.Portable</AssemblyName>
+    <RootNamespace>OmnIoC.Portable</RootNamespace>
+    <AssemblyName>OmnIoC.Portable</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,11 +41,11 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OmnIocAttribute.cs" />
-    <Compile Include="OmnIocReuse.cs" />
-    <Compile Include="OmnIoc_Generic.cs" />
-    <Compile Include="IOmnIoc.cs" />
-    <Compile Include="OmnIoc.cs" />
+    <Compile Include="OmnIoCAttribute.cs" />
+    <Compile Include="OmnIoCReuse.cs" />
+    <Compile Include="OmnIoC_Generic.cs" />
+    <Compile Include="IOmnIoC.cs" />
+    <Compile Include="OmnIoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

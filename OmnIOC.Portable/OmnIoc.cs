@@ -4,15 +4,15 @@ using System.Threading;
 
 // ReSharper disable InconsistentNaming
 
-namespace OmnIoc.Portable
+namespace OmnIoC.Portable
 {
     /// <summary>
     /// Nongeneric implementation of the container
     /// The generic version is faster and this version is supplied just for the sake of registering by <see cref="Type"/>
     /// </summary>
-    public static class OmnIoc
+    public static class OmnIoC
     {
-        internal static readonly Dictionary<Type, IOmnIoc> Instances = new Dictionary<Type, IOmnIoc>();
+        internal static readonly Dictionary<Type, IOmnIoC> Instances = new Dictionary<Type, IOmnIoC>();
         internal static event EventHandler ClearAll = (sender, args) => { };
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace OmnIoc.Portable
 
         private static readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
-        private static readonly Type GenericBase = typeof(OmnIoc<>);
+        private static readonly Type GenericBase = typeof(OmnIoC<>);
         /// <summary>
         ///     Get implementation of <see cref="registrationType" />
         /// </summary>
@@ -53,8 +53,8 @@ namespace OmnIoc.Portable
         /// </summary>
         internal static void LoadAll(IEnumerable<Type> types)
         {
-            var classAttribute = typeof(OmnIocAttribute);
-            var constructorAttribute = typeof(OmnIocConstructorAttribute);
+            var classAttribute = typeof(OmnIoCAttribute);
+            var constructorAttribute = typeof(OmnIoCConstructorAttribute);
 
             foreach (var type in types)
             {
@@ -62,7 +62,7 @@ namespace OmnIoc.Portable
                 if (attributes.Length == 0)
                     continue;
 
-                foreach (var attr in (OmnIocAttribute[])attributes)
+                foreach (var attr in (OmnIoCAttribute[])attributes)
                 {
                     Set(type, null, attr.Reuse, attr.Name);
                 }
@@ -70,12 +70,12 @@ namespace OmnIoc.Portable
         }
 
         /// <summary>
-        ///     Get the right generic type of OmnIoc based on type.
+        ///     Get the right generic type of OmnIoC based on type.
         /// </summary>
         /// <returns></returns>
-        private static IOmnIoc GetContainer(Type type)
+        private static IOmnIoC GetContainer(Type type)
         {
-            IOmnIoc container;
+            IOmnIoC container;
             try
             {
                 Lock.EnterReadLock();
@@ -92,7 +92,7 @@ namespace OmnIoc.Portable
                 // We could get multiple creations here since we enter and exit the lock but that's nothing to worry about.
                 // The created instance is only a light instance to access the static generic registration without generics
                 Lock.EnterWriteLock();
-                container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoc;
+                container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoC;
                 return container;
             }
             finally
@@ -106,12 +106,12 @@ namespace OmnIoc.Portable
         /// </summary>
         /// <param name="registrationType">Type to register</param>
         /// <param name="implementationType">Implementation type of <see cref="registrationType" /> null to use <see cref="registrationType"/></param>
-        /// <param name="iocReuse">Should the registration be singleton or multiple</param>
+        /// <param name="reuse">Should the registration be singleton or multiple</param>
         /// <param name="name"></param>
-        public static void Set(Type registrationType, Type implementationType, IocReuse iocReuse = IocReuse.Multiple, string name = null)
+        public static void Set(Type registrationType, Type implementationType, Reuse reuse = Reuse.Multiple, string name = null)
         {
             var container = GetContainer(registrationType);
-            container.Set(implementationType ?? registrationType, iocReuse, name);
+            container.Set(implementationType ?? registrationType, reuse, name);
         }
 
         public static IEnumerable<object> All(Type registrationType)

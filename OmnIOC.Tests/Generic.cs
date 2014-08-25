@@ -1,25 +1,25 @@
 ﻿using System.Linq;
-using OmnIoc.Portable;
+using OmnIoC.Portable;
 using Xunit;
 
-namespace OmnIoc.Tests
+namespace OmnIoC.Tests
 {
     public class Generic
     {
         public Generic()
         {
-            OmnIoc.Portable.OmnIoc.Clear();
+            OmnIoC.Portable.OmnIoC.Clear();
         }
 
         [Fact]
         public void SetTransient()
         {
             // Register
-            OmnIoc<TestClass1>.Set(() => new TestClass1());
-            OmnIoc<TestClass2>.Set(() => new TestClass2(OmnIoc<TestClass1>.Get()));
+            OmnIoC<TestClass1>.Set(() => new TestClass1());
+            OmnIoC<TestClass2>.Set(() => new TestClass2(OmnIoC<TestClass1>.Get()));
 
             // Resolve
-            var testClass = OmnIoc<TestClass2>.Get();
+            var testClass = OmnIoC<TestClass2>.Get();
 
             // Assert
             Assert.NotNull(testClass);
@@ -30,11 +30,11 @@ namespace OmnIoc.Tests
         public void SetManyTransient()
         {
             // Register
-            OmnIoc<TestClass1>.Set(() => new TestClass1(), "1a");
-            OmnIoc<TestClass2>.Set(() => new TestClass2(OmnIoc<TestClass1>.GetNamed("1A")), "2X");
+            OmnIoC<TestClass1>.Set(() => new TestClass1(), "1a");
+            OmnIoC<TestClass2>.Set(() => new TestClass2(OmnIoC<TestClass1>.GetNamed("1A")), "2X");
 
             // Resolve
-            var testClass = OmnIoc<TestClass2>.GetNamed("2x");
+            var testClass = OmnIoC<TestClass2>.GetNamed("2x");
 
             // Assert
             Assert.NotNull(testClass);
@@ -45,11 +45,11 @@ namespace OmnIoc.Tests
         public void SetSingleton()
         {
             // Register
-            OmnIoc<TestClass1>.Set(new TestClass1());
-            OmnIoc<TestClass2>.Set(new TestClass2(OmnIoc<TestClass1>.Get()));
+            OmnIoC<TestClass1>.Set(new TestClass1());
+            OmnIoC<TestClass2>.Set(new TestClass2(OmnIoC<TestClass1>.Get()));
 
             // Resolve
-            var testClass = OmnIoc<TestClass2>.Get();
+            var testClass = OmnIoC<TestClass2>.Get();
 
             // Assert
             Assert.NotNull(testClass);
@@ -60,17 +60,17 @@ namespace OmnIoc.Tests
         public void SetManySingleton()
         {
             // Register
-            OmnIoc<TestClass1>.Set(new TestClass1(), "1a");
-            OmnIoc<TestClass1>.Set(new TestClass1(), "2a");
-            OmnIoc<TestClass2>.Set(new TestClass2(OmnIoc<TestClass1>.GetNamed("1a")), "1b");
-            OmnIoc<TestClass2>.Set(new TestClass2(OmnIoc<TestClass1>.GetNamed("2a")), "2b");
+            OmnIoC<TestClass1>.Set(new TestClass1(), "1a");
+            OmnIoC<TestClass1>.Set(new TestClass1(), "2a");
+            OmnIoC<TestClass2>.Set(new TestClass2(OmnIoC<TestClass1>.GetNamed("1a")), "1b");
+            OmnIoC<TestClass2>.Set(new TestClass2(OmnIoC<TestClass1>.GetNamed("2a")), "2b");
 
             // Resolve
-            var testClass1 = OmnIoc<TestClass2>.GetNamed("1b");
-            var testClass2 = OmnIoc<TestClass2>.GetNamed("2b");
+            var testClass1 = OmnIoC<TestClass2>.GetNamed("1b");
+            var testClass2 = OmnIoC<TestClass2>.GetNamed("2b");
 
-            var testClass1_2 = OmnIoc<TestClass2>.GetNamed("1b");
-            var testClass2_2 = OmnIoc<TestClass2>.GetNamed("2b");
+            var testClass1_2 = OmnIoC<TestClass2>.GetNamed("1b");
+            var testClass2_2 = OmnIoC<TestClass2>.GetNamed("2b");
 
             // Assert
             Assert.NotNull(testClass1);
@@ -98,7 +98,7 @@ namespace OmnIoc.Tests
             SetManyTransient();
 
             // Resolve
-            var all = OmnIoc<TestClass2>.All().ToList();
+            var all = OmnIoC<TestClass2>.All().ToList();
 
             // Assert
             Assert.Equal(all.Count(), 2);

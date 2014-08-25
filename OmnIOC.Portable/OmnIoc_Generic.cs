@@ -35,9 +35,14 @@ namespace OmnIoc.Portable
             _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         }
 
-        object IOmnIoc.Get(string name)
+        object IOmnIoc.Get()
         {
-            return GetNamed(name ?? string.Empty);
+            return Get();
+        }
+
+        object IOmnIoc.GetNamed(string name)
+        {
+            return GetNamed(name);
         }
 
         /// <summary>

@@ -1,19 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace OmnIoc.Portable
 {
+    /// <summary>
+    /// All reflection based register/resolve
+    /// </summary>
     public static partial class OmnIoc
     {
+        private static readonly ReaderWriterLockSlim Lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
         private static readonly Type GenericBase = typeof (OmnIoc<>);
         /// <summary>
-        ///     Get implementation of <see cref="type" />
+        ///     Get implementation of <see cref="registrationType" />
         /// </summary>
         /// <returns></returns>
-        public static object Get(Type registrationType, string name = null)
+        public static object Get(Type registrationType)
         {
             var container = GetContainer(registrationType);
-            return container.Get(name);
+            return container.Get();
+        }
+        
+        /// <summary>
+        ///     Get named implementation of <see cref="registrationType" />
+        /// </summary>
+        /// <returns></returns>
+        public static object GetNamed(Type registrationType, string name)
+        {
+            var container = GetContainer(registrationType);
+            return container.GetNamed(name);
         }
 
         /// <summary>
@@ -47,26 +63,26 @@ namespace OmnIoc.Portable
             IOmnIoc container;
             try
             {
-                _lock.EnterReadLock();
+                Lock.EnterReadLock();
                 if (Instances.TryGetValue(type, out container))
                     return container;
             }
             finally
             {
-                _lock.ExitReadLock();
+                Lock.ExitReadLock();
             }
 
             try
             {
                 // We could get multiple creations here since we enter and exit the lock but that's nothing to worry about.
                 // The created instance is only a light instance to access the static generic registration without generics
-                _lock.EnterWriteLock();
+                Lock.EnterWriteLock();
                 container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoc;
                 return container;
             }
             finally
             {
-                _lock.ExitWriteLock();
+                Lock.ExitWriteLock();
             }
         }
 

@@ -8,7 +8,8 @@ namespace OmnIoc.Portable
     /// </summary>
     internal interface IOmnIoc
     {
-        object Get(string name = null);
+        object Get();
+        object GetNamed(string name);
         void Set(Type implementationType, IocReuse reuse = IocReuse.Multiple, string name = null);
         IEnumerable<object> All();
     }

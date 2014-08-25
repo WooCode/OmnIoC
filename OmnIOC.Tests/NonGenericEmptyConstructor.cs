@@ -23,9 +23,9 @@ namespace OmnIoc.Tests
             OmnIoc.Portable.OmnIoc.LoadAll(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
 
             // Resolve
-            var test1 = OmnIoc.Portable.OmnIoc.Get(typeof (AttributeTestClass), "testOne");
-            var test2 = OmnIoc.Portable.OmnIoc.Get(typeof(AttributeTestClass), "testTwo");
-            var test3 = OmnIoc.Portable.OmnIoc.Get(typeof(AttributeTestClass), "testTwo");
+            var test1 = OmnIoc.Portable.OmnIoc.GetNamed(typeof (AttributeTestClass), "testOne");
+            var test2 = OmnIoc.Portable.OmnIoc.GetNamed(typeof(AttributeTestClass), "testTwo");
+            var test3 = OmnIoc.Portable.OmnIoc.GetNamed(typeof(AttributeTestClass), "testTwo");
 
             // Assert
             Assert.NotNull(test1);
@@ -78,9 +78,9 @@ namespace OmnIoc.Tests
             OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test3");
 
             // Resolve
-            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test1");
-            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test2");
-            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test3");
+            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
+            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
+            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
 
             // Assert
             Assert.NotNull(test1);
@@ -100,14 +100,14 @@ namespace OmnIoc.Tests
             OmnIoc.Portable.OmnIoc.Set(_registrationType, _implementationType, name: "test3", iocReuse: IocReuse.Singleton);
 
             // Resolve
-            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test1");
-            var test1_2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test1");
+            var test1 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
+            var test1_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test1");
 
-            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test2");
-            var test2_2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test2");
+            var test2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
+            var test2_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test2");
 
-            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test3");
-            var test3_2 = (ITestClass)OmnIoc.Portable.OmnIoc.Get(_registrationType, "test3");
+            var test3 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
+            var test3_2 = (ITestClass)OmnIoc.Portable.OmnIoc.GetNamed(_registrationType, "test3");
 
             var all = OmnIoc<ITestClass>.All();
 

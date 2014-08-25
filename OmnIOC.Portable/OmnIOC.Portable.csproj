@@ -8,8 +8,8 @@
     <ProjectGuid>{6F44EBA2-793C-415A-AD10-6670DCF032E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OmnIOC.Portable</RootNamespace>
-    <AssemblyName>OmnIOC.Portable</AssemblyName>
+    <RootNamespace>OmnIoc.Portable</RootNamespace>
+    <AssemblyName>OmnIoc.Portable</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,6 +41,8 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="OmnIocAttribute.cs" />
+    <Compile Include="OmnIocReuse.cs" />
     <Compile Include="OmnIoc_Generic.cs" />
     <Compile Include="IOmnIoc.cs" />
     <Compile Include="OmnIoc.cs" />

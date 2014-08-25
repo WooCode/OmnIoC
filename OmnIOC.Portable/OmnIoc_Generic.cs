@@ -5,7 +5,7 @@ using System.Linq;
 // ReSharper disable InconsistentNaming
 // ReSharper disable StaticFieldInGenericType
 
-namespace OmnIOC.Portable
+namespace OmnIoc.Portable
 {
     /// <summary>
     ///     Generic container that holds registrations for type(s)
@@ -35,25 +35,37 @@ namespace OmnIOC.Portable
             _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         }
 
-        public object GetTypeInstance(string name)
+        object IOmnIoc.Get(string name)
         {
             return GetNamed(name ?? string.Empty);
         }
 
-        public void SetTypeInstance(Type implementationType, OmnIoc.Reuse reuse, string name)
+        /// <summary>
+        /// Set implementation type for <see cref="RegistrationType"/> with name 
+        /// </summary>
+        /// <param name="implementationType"></param>
+        /// <param name="reuse"></param>
+        /// <param name="name"></param>
+        void IOmnIoc.Set(Type implementationType, IocReuse reuse, string name)
         {
             switch (reuse)
             {
-                case OmnIoc.Reuse.Multiple:
+                case IocReuse.Multiple:
                     Set(() => (RegistrationType) Activator.CreateInstance(implementationType), name);
                     break;
-                case OmnIoc.Reuse.Singleton:
+                case IocReuse.Singleton:
                     var instance = (RegistrationType) Activator.CreateInstance(implementationType);
                     Set(() => instance, name);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("reuse");
             }
+        }
+
+        IEnumerable<object> IOmnIoc.All()
+        {
+            lock (_syncLock)
+                return _namedCollection.Values.Select(f => (object)f());
         }
 
         /// <summary>
@@ -100,9 +112,9 @@ namespace OmnIOC.Portable
         /// <summary>
         ///     Register instance
         /// </summary>
-        public static void Set<ImplementationType>(OmnIoc.Reuse reuse = OmnIoc.Reuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
+        public static void Set<ImplementationType>(IocReuse reuse = IocReuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
         {
-            if (reuse == OmnIoc.Reuse.Singleton)
+            if (reuse == IocReuse.Singleton)
                 Set(new ImplementationType());
             else
                 Set(() => new ImplementationType(), name);

@@ -7,8 +7,8 @@
     <ProjectGuid>{15AB6567-B31D-4A9C-B925-FBCB05EB1413}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OmnIOC.Tests</RootNamespace>
-    <AssemblyName>OmnIOC.Tests</AssemblyName>
+    <RootNamespace>OmnIoc.Tests</RootNamespace>
+    <AssemblyName>OmnIoc.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -47,7 +47,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeTestClass.cs" />
     <Compile Include="Generic.cs" />
+    <Compile Include="ITestClass.cs" />
     <Compile Include="NonGenericEmptyConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClass1.cs" />
@@ -57,9 +59,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OmnIOC.Portable\OmnIOC.Portable.csproj">
+    <ProjectReference Include="..\OmnIOC.Portable\OmnIoc.Portable.csproj">
       <Project>{6F44EBA2-793C-415A-AD10-6670DCF032E5}</Project>
-      <Name>OmnIOC.Portable</Name>
+      <Name>OmnIoc.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

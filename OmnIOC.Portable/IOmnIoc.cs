@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace OmnIOC.Portable
+namespace OmnIoc.Portable
 {
+    /// <summary>
+    /// Interface for accessing OmnIoc without generics
+    /// </summary>
     internal interface IOmnIoc
     {
-        object GetTypeInstance(string name = null);
-        void SetTypeInstance(Type implementationType, OmnIoc.Reuse reuse = OmnIoc.Reuse.Multiple, string name = null);
+        object Get(string name = null);
+        void Set(Type implementationType, IocReuse reuse = IocReuse.Multiple, string name = null);
+        IEnumerable<object> All();
     }
 }

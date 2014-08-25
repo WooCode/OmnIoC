@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using OmnIOC.Portable;
+﻿using System.Linq;
+using OmnIoc.Portable;
 using Xunit;
 
-namespace OmnIOC.Tests
+namespace OmnIoc.Tests
 {
     public class Generic
     {
         public Generic()
         {
-            OmnIoc.Clear();
+            OmnIoc.Portable.OmnIoc.Clear();
         }
 
         [Fact]

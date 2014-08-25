@@ -1,6 +1,6 @@
-namespace OmnIOC.Tests
+namespace OmnIoc.Tests
 {
-    public class TestClass1
+    public class TestClass1 : ITestClass
     {
     }
 }

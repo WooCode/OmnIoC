@@ -4,15 +4,11 @@ using System.Threading;
 
 // ReSharper disable InconsistentNaming
 
-namespace OmnIOC.Portable
+namespace OmnIoc.Portable
 {
     public static partial class OmnIoc
     {
-        public enum Reuse
-        {
-            Multiple,
-            Singleton
-        }
+
 
         internal static readonly Dictionary<Type, IOmnIoc> Instances = new Dictionary<Type, IOmnIoc>();
         private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
@@ -46,8 +42,6 @@ namespace OmnIOC.Portable
             Set(() => instance, name);
         }
     }
-
-    
 }
 
 // ReSharper enable InconsistentNaming

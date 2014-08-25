@@ -1,6 +1,6 @@
-namespace OmnIOC.Tests
+namespace OmnIoc.Tests
 {
-    public class TestClass2
+    public class TestClass2 : ITestClass
     {
         // ReSharper disable NotAccessedField.Local
         public readonly TestClass1 Inner;

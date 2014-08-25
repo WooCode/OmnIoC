@@ -8,6 +8,11 @@ Portable Class Library Ioc that is **fast** and works in
 
 **OmnIoc** is very much in development and should not be seen as production-ready
 
+**Install**
+```
+PM> Install-Package OmnIOC.Portable
+```
+
 **Current features**
 
 - Nongeneric register/resolve (set/get)

@@ -10,7 +10,7 @@ Portable Class Library Ioc that is **fast** and works in
 
 **Install**
 ```
-PM> Install-Package OmnIOC.Portable
+PM> Install-Package OmnIoc.Portable
 ```
 
 **Status**

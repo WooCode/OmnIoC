@@ -6,11 +6,11 @@ using System.Reflection;
 // associated with an assembly.
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("OmnIOC.Portable")]
+[assembly: AssemblyTitle("OmnIoc.Portable")]
 [assembly: AssemblyDescription("IOC'ish IOC..")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("OmnIOC.Portable")]
+[assembly: AssemblyProduct("OmnIoc.Portable")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -29,4 +29,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("OmnIOC.Tests")]
+[assembly: InternalsVisibleTo("OmnIoc.Tests")]

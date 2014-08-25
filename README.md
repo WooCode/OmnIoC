@@ -10,7 +10,8 @@ Portable Class Library Ioc that is **fast** and works in
 
 **Current features**
 
-- Generic register/resolve (set/get)
+- Nongeneric register/resolve (set/get)
+- Generic register/resolve (set/get) **fast**
 - Named registrations/resolves
 - Resolve multiple registrations of type as IEnumerable< T >
 

@@ -64,8 +64,7 @@ namespace OmnIoc.Portable
 
         IEnumerable<object> IOmnIoc.All()
         {
-            lock (_syncLock)
-                return _namedCollection.Values.Select(f => (object)f());
+            return _namedCollection.Values.Select(f => (object)f());
         }
 
         /// <summary>
@@ -81,8 +80,7 @@ namespace OmnIoc.Portable
         /// </summary>
         public static IEnumerable<RegistrationType> All()
         {
-            lock (_syncLock)
-                return _namedCollection.Values.Select(f => f());
+            return _namedCollection.Values.Select(f => f());
         }
 
         /// <summary>
@@ -97,7 +95,9 @@ namespace OmnIoc.Portable
                     Get = factory;
                     name = string.Empty;
                 }
-                _namedCollection[name] = factory;
+                var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection,StringComparer.OrdinalIgnoreCase);
+                newCollection[name] = factory;
+                _namedCollection = newCollection;
             }
         }
 

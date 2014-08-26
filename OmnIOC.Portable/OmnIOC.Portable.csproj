@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="OmnIoCAttribute.cs" />
-    <Compile Include="OmnIoCReuse.cs" />
+    <Compile Include="Reuse.cs" />
     <Compile Include="IOmnIoC.cs" />
     <Compile Include="OmnIoC.cs" />
     <Compile Include="OmnIoC_nongeneric.cs" />

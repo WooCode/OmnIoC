@@ -35,6 +35,8 @@
       template: |
           <{{buildUrl}}|Build {{projectName}} {{buildVersion}} {{status}}> 
           <{{commitUrl}}|{{commitMessage}}> by {{commitAuthor}} on {{commitDate}}
+      on_build_success: false
+      on_build_failure: true
 -
   branches:
     only:

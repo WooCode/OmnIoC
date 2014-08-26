@@ -77,8 +77,7 @@ namespace OmnIoC.Portable
         {
             IOmnIoCContainer container;
             if (Instances.TryGetValue(type, out container)) return container;
-            // We could get multiple creations here since we enter and exit the lock but that's nothing to worry about.
-            // The created instance is only a light instance to access the static generic registration without generics
+
             lock (_syncLock)
             {
                 if (Instances.TryGetValue(type, out container)) return container;

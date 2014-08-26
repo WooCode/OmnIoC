@@ -53,7 +53,7 @@ namespace OmnIoC.Portable
 
         #endregion
 
-        private static Dictionary<string, Func<RegistrationType>> _namedCollection;
+        private static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         private static readonly object _syncLock = new object();
 
         /// <summary>
@@ -63,16 +63,16 @@ namespace OmnIoC.Portable
 
         static OmnIoCContainer()
         {
-            OmnIoCContainer.ClearAll += (sender, args) =>
-            {
-                lock (_syncLock)
-                {
-                    _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-                    Get = () => default(RegistrationType);
-                }
-            };
+            OmnIoCContainer.ClearAll += Clear;
+        }
 
-            _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+        public static void Clear()
+        {
+            lock (_syncLock)
+            {
+                _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+                Get = () => default(RegistrationType);
+            }
         }
 
         /// <summary>

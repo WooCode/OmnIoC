@@ -11,12 +11,12 @@ namespace OmnIoC.Portable
     /// </summary>
     public static class OmnIoCContainer
     {
+        internal delegate void ClearContainerEventArgs();
+        internal static event ClearContainerEventArgs ClearAll = () => { };
+
         private static Dictionary<Type, IOmnIoCContainer> Instances = new Dictionary<Type, IOmnIoCContainer>();
-        internal static event EventHandler ClearAll = (sender, args) => { };
-        
         private static readonly object _syncLock = new object();
         private static readonly Type GenericBase = typeof (OmnIoCContainer<>);
-        
 
         /// <summary>
         ///     Clear all registrations
@@ -24,7 +24,7 @@ namespace OmnIoC.Portable
         public static void Clear()
         {
             var handler = ClearAll;
-            if (handler != null) handler(null, EventArgs.Empty);
+            if (handler != null) handler();
         }
 
         /// <summary>

@@ -10,16 +10,16 @@ namespace OmnIoC.Portable
     /// <summary>
     ///     Generic container that holds registrations for type(s)
     /// </summary>
-    public sealed class OmnIoC<RegistrationType> : IOmnIoC
+    public sealed class OmnIoCContainer<RegistrationType> : IOmnIoCContainer
     {
         #region IOmnIoC members
 
-        object IOmnIoC.Get()
+        object IOmnIoCContainer.Get()
         {
             return Get();
         }
 
-        object IOmnIoC.GetNamed(string name)
+        object IOmnIoCContainer.GetNamed(string name)
         {
             return GetNamed(name);
         }
@@ -30,7 +30,7 @@ namespace OmnIoC.Portable
         /// <param name="implementationType"></param>
         /// <param name="reuse"></param>
         /// <param name="name"></param>
-        void IOmnIoC.Set(Type implementationType, Reuse reuse, string name)
+        void IOmnIoCContainer.Set(Type implementationType, Reuse reuse, string name)
         {
             switch (reuse)
             {
@@ -46,7 +46,7 @@ namespace OmnIoC.Portable
             }
         }
 
-        IEnumerable<object> IOmnIoC.All()
+        IEnumerable<object> IOmnIoCContainer.All()
         {
             return _namedCollection.Values.Select(f => (object) f());
         }
@@ -61,9 +61,9 @@ namespace OmnIoC.Portable
         /// </summary>
         public static Func<RegistrationType> Get = () => default(RegistrationType);
 
-        static OmnIoC()
+        static OmnIoCContainer()
         {
-            OmnIoC.ClearAll += (sender, args) =>
+            OmnIoCContainer.ClearAll += (sender, args) =>
             {
                 lock (_syncLock)
                 {

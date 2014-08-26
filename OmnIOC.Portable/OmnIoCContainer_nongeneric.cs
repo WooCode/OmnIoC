@@ -9,13 +9,13 @@ namespace OmnIoC.Portable
     ///     Nongeneric part of the container
     ///     The generic version is faster and this version is supplied just for the sake of registering by <see cref="Type" />
     /// </summary>
-    public static class OmnIoC
+    public static class OmnIoCContainer
     {
-        private static Dictionary<Type, IOmnIoC> Instances = new Dictionary<Type, IOmnIoC>();
+        private static Dictionary<Type, IOmnIoCContainer> Instances = new Dictionary<Type, IOmnIoCContainer>();
         internal static event EventHandler ClearAll = (sender, args) => { };
         
         private static readonly object _syncLock = new object();
-        private static readonly Type GenericBase = typeof (OmnIoC<>);
+        private static readonly Type GenericBase = typeof (OmnIoCContainer<>);
         
 
         /// <summary>
@@ -73,19 +73,19 @@ namespace OmnIoC.Portable
         ///     Get the right generic type of OmnIoC based on type.
         /// </summary>
         /// <returns></returns>
-        private static IOmnIoC GetContainer(Type type)
+        private static IOmnIoCContainer GetContainer(Type type)
         {
-            IOmnIoC container;
+            IOmnIoCContainer container;
             if (Instances.TryGetValue(type, out container)) return container;
             // We could get multiple creations here since we enter and exit the lock but that's nothing to worry about.
             // The created instance is only a light instance to access the static generic registration without generics
             lock (_syncLock)
             {
                 if (Instances.TryGetValue(type, out container)) return container;
-                container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoC;
+                container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoCContainer;
 
                 // Safely copy the old dictionary to new one and add the new container
-                var newCollection = new Dictionary<Type, IOmnIoC>(Instances);
+                var newCollection = new Dictionary<Type, IOmnIoCContainer>(Instances);
                 newCollection[type] = container;
                 Instances = newCollection;
             }

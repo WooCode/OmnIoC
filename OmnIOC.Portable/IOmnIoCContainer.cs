@@ -6,7 +6,7 @@ namespace OmnIoC.Portable
     /// <summary>
     /// Interface for accessing OmnIoC without generics
     /// </summary>
-    internal interface IOmnIoC
+    internal interface IOmnIoCContainer
     {
         object Get();
         object GetNamed(string name);

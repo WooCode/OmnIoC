@@ -6,12 +6,12 @@ using Xunit;
 // ReSharper disable InconsistentNaming
 namespace OmnIoC.Tests
 {
-    public class NonGenericEmptyConstructor
+    public class NonGeneric
     {
         private readonly Type _implementationType = typeof (TestClass1);
         private readonly Type _registrationType = typeof(ITestClass);
 
-        public NonGenericEmptyConstructor()
+        public NonGeneric()
         {
             OmnIoC.Portable.OmnIoCContainer.Clear();
         }
@@ -20,12 +20,12 @@ namespace OmnIoC.Tests
         public void LoadAttributes()
         {
             // Register
-            OmnIoC.Portable.OmnIoCContainer.LoadAll(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
+            OmnIoCContainer.LoadAll(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
 
             // Resolve
-            var test1 = OmnIoC.Portable.OmnIoCContainer.GetNamed(typeof (AttributeTestClass), "testOne");
-            var test2 = OmnIoC.Portable.OmnIoCContainer.GetNamed(typeof(AttributeTestClass), "testTwo");
-            var test3 = OmnIoC.Portable.OmnIoCContainer.GetNamed(typeof(AttributeTestClass), "testTwo");
+            var test1 = (AttributeTestClass)OmnIoCContainer.GetNamed(typeof (AttributeTestClass), "testOne");
+            var test2 = (AttributeTestClass)OmnIoCContainer.GetNamed(typeof(AttributeTestClass), "testTwo");
+            var test3 = (AttributeTestClass)OmnIoCContainer.GetNamed(typeof(AttributeTestClass), "testTwo");
 
             // Assert
             Assert.NotNull(test1);
@@ -35,13 +35,16 @@ namespace OmnIoC.Tests
             Assert.NotEqual(test1, test2);
             Assert.NotEqual(test1, test3);
             Assert.Equal(test2, test3);
+            Assert.Equal(test1.Name, "XXX");
+            Assert.Equal(test2.Name, "XXX");
+
         }
 
         [Fact]
         public void SetTransient()
         {
             // Register
-            OmnIoC.Portable.OmnIoCContainer.Set(_registrationType, _implementationType);
+            OmnIoCContainer.Set(_registrationType, _implementationType);
 
             // Resolve
             var test1 = (TestClass1)OmnIoC.Portable.OmnIoCContainer.Get(_registrationType);

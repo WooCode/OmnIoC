@@ -67,7 +67,7 @@
     verbosity: quiet  # quiet|minimal|normal|detailed
 
   deploy:
-    - provider: Nuget
+    - provider: Environment
       name: WooCodeNuget
       on:
         branch: master

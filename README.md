@@ -1,4 +1,4 @@
-OmnIoC
+OmnIoC [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/develop)
 ===
 Portable Class Library Ioc that is **fast** and works in
 
@@ -12,11 +12,6 @@ Portable Class Library Ioc that is **fast** and works in
 ```
 PM> Install-Package OmnIoC.Portable
 ```
-
-**Status**
-
-- Master [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/master)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/master)
-- Develop [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/develop)
 
 **Current features**
 

@@ -6,7 +6,7 @@ namespace OmnIoC.Tests
     [OmnIoCExport(Reuse = Reuse.Multiple, RegistrationType = typeof(IAttributeTestClass))]
     // Export as named IAttributeTestClass that is resolved with OmnIoCContainer<IAttributeTestClass>.Get("multiple")
     [OmnIoCExport(Name = "multiple", Reuse = Reuse.Multiple, RegistrationType = typeof(IAttributeTestClass))]
-    // Export as named singleton AttributeTestClass that is resolved with OmnIoCContainer<IAttributeTestClass>.Get("singleton")
+    // Export as named singleton AttributeTestClass that is resolved with OmnIoCContainer<AttributeTestClass>.Get("singleton")
     [OmnIoCExport(Name = "singleton", Reuse = Reuse.Singleton, RegistrationType = typeof(AttributeTestClass))]
     public class AttributeTestClass : IAttributeTestClass
     {

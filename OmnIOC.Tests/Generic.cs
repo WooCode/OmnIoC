@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using OmnIoC.Portable;
 using Xunit;
 
@@ -8,7 +9,40 @@ namespace OmnIoC.Tests
     {
         public Generic()
         {
-            OmnIoC.Portable.OmnIoCContainer.Clear();
+            OmnIoCContainer.Clear();
+        }
+
+        [Fact]
+        public void LoadByAttributes()
+        {
+            // Register all types decorated with OmnIoCAttribute
+            OmnIoCContainer.Load(AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()));
+
+            // Resolve
+            var unnamedTest = OmnIoCContainer<IAttributeTestClass>.Get();
+            var test1 = OmnIoCContainer<IAttributeTestClass>.GetNamed("multiple");
+            var test2 = OmnIoCContainer<IAttributeTestClass>.GetNamed("multiple");
+            var test3 = OmnIoCContainer<AttributeTestClass>.GetNamed("singleton");
+            var test4 = OmnIoCContainer<AttributeTestClass>.GetNamed("singleton");
+
+            // Assert
+            Assert.NotNull(unnamedTest);
+            Assert.NotNull(test1);
+            Assert.NotNull(test2);
+            Assert.NotNull(test3);
+
+            Assert.NotEqual(unnamedTest,test1);
+            Assert.NotEqual(unnamedTest, test3);
+            Assert.NotEqual(test1, test3);
+            Assert.NotEqual(test2, test3);
+            Assert.NotEqual(test1, test4);
+            Assert.NotEqual(test2, test4);
+            Assert.NotEqual(test1, test2);
+
+            Assert.Equal(test3, test4);
+            Assert.Equal(test1.Name, "XXX");
+            Assert.Equal(test2.Name, "XXX");
+            Assert.Equal(test1.Name, "XXX");
         }
 
         [Fact]

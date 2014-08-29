@@ -2,22 +2,29 @@ using OmnIoC.Portable;
 
 namespace OmnIoC.Tests
 {
-    [OmnIoC(Name = "testOne", Reuse = Reuse.Multiple)]
-    [OmnIoC(Name = "testTwo", Reuse = Reuse.Singleton)]
-    public class AttributeTestClass
+    // Export as unnamed IAttributeTestClass that is resolved with OmnIoCContainer<IAttributeTestClass>.Get()
+    [OmnIoCExport(Reuse = Reuse.Multiple, RegistrationType = typeof(IAttributeTestClass))]
+    // Export as named IAttributeTestClass that is resolved with OmnIoCContainer<IAttributeTestClass>.Get("multiple")
+    [OmnIoCExport(Name = "multiple", Reuse = Reuse.Multiple, RegistrationType = typeof(IAttributeTestClass))]
+    // Export as named singleton AttributeTestClass that is resolved with OmnIoCContainer<IAttributeTestClass>.Get("singleton")
+    [OmnIoCExport(Name = "singleton", Reuse = Reuse.Singleton, RegistrationType = typeof(AttributeTestClass))]
+    public class AttributeTestClass : IAttributeTestClass
     {
         public string Name { get; set; }
 
-        [OmnIoCConstructor(Name = "test")]
         public AttributeTestClass(string name)
         {
             Name = name;
         }
 
-        [OmnIoCConstructor(Name = "test2")]
         public AttributeTestClass()
         {
             Name = "XXX";
         }
+    }
+
+    public interface IAttributeTestClass
+    {
+        string Name { get; set; }
     }
 }

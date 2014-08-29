@@ -12,7 +12,7 @@ namespace OmnIoC.Portable
     /// </summary>
     public sealed class OmnIoCContainer<RegistrationType> : IOmnIoCContainer
     {
-        #region IOmnIoC members
+        #region IOmnIoCContainer members
 
         object IOmnIoCContainer.Get()
         {

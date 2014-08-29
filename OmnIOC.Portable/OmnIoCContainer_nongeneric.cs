@@ -11,12 +11,10 @@ namespace OmnIoC.Portable
     /// </summary>
     public static class OmnIoCContainer
     {
-        internal delegate void ClearContainerEventArgs();
-        internal static event ClearContainerEventArgs ClearAll = () => { };
-
-        private static Dictionary<Type, IOmnIoCContainer> Instances = new Dictionary<Type, IOmnIoCContainer>();
+        private static Dictionary<Type, IOmnIoCContainer> GenericInstances = new Dictionary<Type, IOmnIoCContainer>();
         private static readonly object _syncLock = new object();
         private static readonly Type GenericBase = typeof (OmnIoCContainer<>);
+        internal static event ClearContainerEventArgs ClearAll = () => { };
 
         /// <summary>
         ///     Clear all registrations
@@ -48,23 +46,23 @@ namespace OmnIoC.Portable
         }
 
         /// <summary>
-        ///     Load all attributed types
-        ///     <remarks>Internal for now since it's not complete</remarks>
+        ///     Load all types that is decorated with <see cref="OmnIoCExportAttribute"/>
         /// </summary>
-        internal static void LoadAll(IEnumerable<Type> types)
+        public static void Load(IEnumerable<Type> types)
         {
-            var classAttribute = typeof (OmnIoCAttribute);
-            var constructorAttribute = typeof (OmnIoCConstructorAttribute);
-
+            var classAttribute = typeof (OmnIoCExportAttribute);
             foreach (var type in types)
             {
-                var attributes = type.GetCustomAttributes(classAttribute, false);
-                if (attributes.Length == 0)
+                var attributes = type.GetCustomAttributes(classAttribute, false) as OmnIoCExportAttribute[];
+                if (attributes == null || attributes.Length == 0)
                     continue;
 
-                foreach (var attr in (OmnIoCAttribute[]) attributes)
+                foreach (var attr in attributes)
                 {
-                    Set(type, null, attr.Reuse, attr.Name);
+                    if (!attr.RegistrationType.IsAssignableFrom(type))
+                        throw new Exception(string.Format("{0} is not assignable from {1}", attr.RegistrationType.Name, type.Name));
+
+                    Set(attr.RegistrationType, type, attr.Reuse, attr.Name);
                 }
             }
         }
@@ -76,17 +74,17 @@ namespace OmnIoC.Portable
         private static IOmnIoCContainer GetContainer(Type type)
         {
             IOmnIoCContainer container;
-            if (Instances.TryGetValue(type, out container)) return container;
+            if (GenericInstances.TryGetValue(type, out container)) return container;
 
             lock (_syncLock)
             {
-                if (Instances.TryGetValue(type, out container)) return container;
+                if (GenericInstances.TryGetValue(type, out container)) return container;
                 container = Activator.CreateInstance(GenericBase.MakeGenericType(type)) as IOmnIoCContainer;
 
                 // Safely copy the old dictionary to new one and add the new container
-                var newCollection = new Dictionary<Type, IOmnIoCContainer>(Instances);
+                var newCollection = new Dictionary<Type, IOmnIoCContainer>(GenericInstances);
                 newCollection[type] = container;
-                Instances = newCollection;
+                GenericInstances = newCollection;
             }
 
             return container;
@@ -109,6 +107,8 @@ namespace OmnIoC.Portable
         {
             return GetContainer(registrationType).All();
         }
+
+        internal delegate void ClearContainerEventArgs();
     }
 }
 

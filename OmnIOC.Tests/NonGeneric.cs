@@ -16,6 +16,23 @@ namespace OmnIoC.Tests
         {
             OmnIoCContainer.Clear();
         }
+        
+        [Fact]
+        public void ResolveWithoutRegistration()
+        {
+            // Resolve
+            var test = (TestClass)OmnIoCContainer.Get(typeof(TestClass));
+
+            // Assert
+            Assert.NotNull(test);
+            Assert.NotNull(test.Inner);
+
+            Assert.NotNull(test.Inner2);
+            Assert.NotNull(test.Inner2.Inner);
+
+            Assert.NotNull(test.Inner3);
+            Assert.NotNull(test.Inner3.Inner);
+        }
 
         [Fact]
         public void LoadByAttributes()

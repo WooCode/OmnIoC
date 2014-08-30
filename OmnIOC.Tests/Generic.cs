@@ -13,6 +13,14 @@ namespace OmnIoC.Tests
         }
 
         [Fact]
+        public void ResolveWithoutRegistration()
+        {
+            var test = OmnIoCContainer<TestClass2>.Get();
+            Assert.NotNull(test);
+            Assert.NotNull(test.Inner);
+        }
+
+        [Fact]
         public void LoadByAttributes()
         {
             // Register all types decorated with OmnIoCAttribute

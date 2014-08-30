@@ -64,14 +64,36 @@ namespace OmnIoC.Portable
         static OmnIoCContainer()
         {
             OmnIoCContainer.ClearAll += Clear;
+            SetDefaults();
+        }
+
+        private static void SetDefaults()
+        {
+            _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+
+            var type = typeof (RegistrationType);
+            // Find the constructor with most parameters
+            var ctor = type.GetConstructors().OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
+
+            if (type.IsInterface || type.IsAbstract || ctor == null)
+            {
+                Get = () => default(RegistrationType);
+                return;
+            }
+            
+            var parameters = ctor.GetParameters().ToArray();
+
+            if (parameters.Length == 0)
+                Get = Activator.CreateInstance<RegistrationType>;
+            else
+                Get = () => (RegistrationType) ctor.Invoke(parameters.Select(p => OmnIoCContainer.Get(p.ParameterType)).ToArray());
         }
 
         public static void Clear()
         {
             lock (_syncLock)
             {
-                _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-                Get = () => default(RegistrationType);
+                SetDefaults();
             }
         }
 

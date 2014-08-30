@@ -73,7 +73,10 @@ namespace OmnIoC.Portable
 
             var type = typeof (RegistrationType);
             // Find the constructor with most parameters
-            var ctor = type.GetConstructors().OrderByDescending(c => c.GetParameters().Length).FirstOrDefault();
+            var ctor = type.GetConstructors()
+                .Where(c => !c.GetParameters().Any(p => p.ParameterType.IsAbstract || p.ParameterType.IsInterface || p.ParameterType.IsGenericType))
+                .OrderByDescending(c => c.GetParameters().Length)
+                .FirstOrDefault();
 
             if (type.IsInterface || type.IsAbstract || ctor == null)
             {

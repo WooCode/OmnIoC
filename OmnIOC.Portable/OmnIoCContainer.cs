@@ -72,7 +72,7 @@ namespace OmnIoC.Portable
             _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
 
             var type = typeof (RegistrationType);
-            // Find the constructor with most parameters
+            // Find the constructor that has the most parameters that we can supply
             var ctor = type.GetConstructors()
                 .Where(c => !c.GetParameters().Any(p => p.ParameterType.IsAbstract || p.ParameterType.IsInterface || p.ParameterType.IsGenericType))
                 .OrderByDescending(c => c.GetParameters().Length)

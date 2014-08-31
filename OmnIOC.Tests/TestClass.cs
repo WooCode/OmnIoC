@@ -6,11 +6,6 @@ namespace OmnIoC.Tests
         public TestClass2 Inner2 { get; set; }
         public TestClass3 Inner3 { get; set; }
 
-        public TestClass(TestClass1 inner)
-        {
-            Inner = inner;
-        }
-
         public TestClass(TestClass1 inner1, TestClass2 inner2, TestClass3 inner3)
         {
             Inner = inner1;

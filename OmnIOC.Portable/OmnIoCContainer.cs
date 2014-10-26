@@ -15,7 +15,7 @@ namespace OmnIoC.Portable
         #region IOmnIoCContainer members
 
         object IOmnIoCContainer.Get()
-        {
+        {           
             return Get();
         }
 
@@ -83,7 +83,7 @@ namespace OmnIoC.Portable
                 Get = () => default(RegistrationType);
                 return;
             }
-            
+
             var parameters = ctor.GetParameters().ToArray();
 
             if (parameters.Length == 0)
@@ -105,7 +105,7 @@ namespace OmnIoC.Portable
         /// </summary>
         public static RegistrationType GetNamed(string name)
         {
-            return _namedCollection[name]();
+            return _namedCollection[name].Invoke();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace OmnIoC.Portable
         public static void Set<ImplementationType>(Reuse reuse = Reuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
         {
             if (reuse == Reuse.Singleton)
-                Set(new ImplementationType());
+                Set(new ImplementationType(), name);
             else
                 Set(() => new ImplementationType(), name);
         }

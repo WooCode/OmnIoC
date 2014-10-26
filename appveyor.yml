@@ -31,11 +31,11 @@
     - provider: Slack
       auth_token:
         secure: k+hpi944zeZncM44fnBuk1nprO7vIgww6yvtLivVMW8y1wnT4uweT44Vgpb//9fn
-      channel: playground
+      channel: omnnioc
       template: |
           <{{buildUrl}}|Build {{projectName}} {{buildVersion}} {{status}}> 
           <{{commitUrl}}|{{commitMessage}}> by {{commitAuthor}} on {{commitDate}}
-      on_build_success: false
+      on_build_success: true
       on_build_failure: true
 -
   branches:
@@ -76,7 +76,7 @@
     - provider: Slack
       auth_token:
         secure: k+hpi944zeZncM44fnBuk1nprO7vIgww6yvtLivVMW8y1wnT4uweT44Vgpb//9fn
-      channel: playground
+      channel: omnnioc
       template: |
           <{{buildUrl}}|Build {{projectName}} {{buildVersion}} {{status}}> 
           <{{commitUrl}}|{{commitMessage}}> by {{commitAuthor}} on {{commitDate}}

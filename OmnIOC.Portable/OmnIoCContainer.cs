@@ -15,7 +15,7 @@ namespace OmnIoC.Portable
         #region IOmnIoCContainer members
 
         object IOmnIoCContainer.Get()
-        {
+        {           
             return Get();
         }
 
@@ -64,14 +64,39 @@ namespace OmnIoC.Portable
         static OmnIoCContainer()
         {
             OmnIoCContainer.ClearAll += Clear;
+            SetDefaults();
+        }
+
+        private static void SetDefaults()
+        {
+            _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+
+            var type = typeof (RegistrationType);
+            // Find the constructor that has the most parameters that we can supply
+            var ctor = type.GetConstructors()
+                .Where(c => !c.GetParameters().Any(p => p.ParameterType.IsAbstract || p.ParameterType.IsInterface || p.ParameterType.IsGenericType))
+                .OrderByDescending(c => c.GetParameters().Length)
+                .FirstOrDefault();
+
+            if (type.IsInterface || type.IsAbstract || ctor == null)
+            {
+                Get = () => default(RegistrationType);
+                return;
+            }
+
+            var parameters = ctor.GetParameters().ToArray();
+
+            if (parameters.Length == 0)
+                Get = Activator.CreateInstance<RegistrationType>;
+            else
+                Get = () => (RegistrationType) ctor.Invoke(parameters.Select(p => OmnIoCContainer.Get(p.ParameterType)).ToArray());
         }
 
         public static void Clear()
         {
             lock (_syncLock)
             {
-                _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-                Get = () => default(RegistrationType);
+                SetDefaults();
             }
         }
 
@@ -80,7 +105,7 @@ namespace OmnIoC.Portable
         /// </summary>
         public static RegistrationType GetNamed(string name)
         {
-            return _namedCollection[name]();
+            return _namedCollection[name].Invoke();
         }
 
         /// <summary>
@@ -124,7 +149,7 @@ namespace OmnIoC.Portable
         public static void Set<ImplementationType>(Reuse reuse = Reuse.Multiple, string name = null) where ImplementationType : RegistrationType, new()
         {
             if (reuse == Reuse.Singleton)
-                Set(new ImplementationType());
+                Set(new ImplementationType(), name);
             else
                 Set(() => new ImplementationType(), name);
         }

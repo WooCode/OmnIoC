@@ -4,7 +4,7 @@
     only:
       - develop
 
-  version: "0.0.{build}"
+  version: "0.1.{build}"
 
   # enable patching of AssemblyInfo.* files
   assembly_info:
@@ -48,9 +48,9 @@
   assembly_info:
     patch: true
     file: AssemblyInfo.*
-    assembly_version: "0.1.0"
-    assembly_file_version: "0.1.0"
-    assembly_informational_version: "0.1.0"
+    assembly_version: "{version}"
+    assembly_file_version: "{version}"
+    assembly_informational_version: "{version}"
 
   init: 
     - "git config --global core.autocrlf input"

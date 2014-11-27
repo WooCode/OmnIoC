@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OmnIoC.Portable;
 using Xunit;
@@ -10,6 +11,20 @@ namespace OmnIoC.Tests
         public Generic()
         {
             OmnIoCContainer.Clear();
+        }
+
+        [Fact]
+        public void RemoveShouldRemoveRegistrated()
+        {
+            OmnIoCContainer<int>.DefaultValueFactory = () => 33;
+            // Register
+            OmnIoCContainer<int>.Set(10, "Test");
+
+            // Act
+            OmnIoCContainer<int>.Remove("Test");
+
+            // Assert
+            Assert.Equal(33,OmnIoCContainer<int>.GetNamed("Test"));
         }
 
         [Fact]
@@ -146,12 +161,11 @@ namespace OmnIoC.Tests
             SetManyTransient();
 
             // Resolve
-            var all = OmnIoCContainer<TestClass2>.All().ToList();
+            var all = OmnIoCContainer<TestClass2>.AllNamed.ToList();
 
             // Assert
-            Assert.Equal(all.Count(), 2);
+            Assert.Equal(1, all.Count());
             Assert.True(all.All(t => t.Inner != null));
-            Assert.False(all.First().Inner == all.Last().Inner);
         }
     }
 }

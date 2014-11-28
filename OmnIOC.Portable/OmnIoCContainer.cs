@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable InconsistentNaming
+
 // ReSharper disable StaticFieldInGenericType
 
 namespace OmnIoC.Portable
@@ -184,4 +184,3 @@ namespace OmnIoC.Portable
 }
 
 // ReSharper restore StaticFieldInGenericType
-// ReSharper restore InconsistentNaming

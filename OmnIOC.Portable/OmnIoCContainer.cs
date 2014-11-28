@@ -107,7 +107,7 @@ namespace OmnIoC.Portable
                 return;
             }
 
-            var parameters = ctor.GetParameters().ToArray();
+            var parameters = ctor.GetParameters();
 
             if (parameters.Length == 0)
                 Get = Activator.CreateInstance<RegistrationType>;

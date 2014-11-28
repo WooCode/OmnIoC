@@ -177,10 +177,13 @@ namespace OmnIoC.Tests
             OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "second");
 
             // Resolve
-            var all = OmnIoCContainer<TestClass1>.AllNames;
+            var all = OmnIoCContainer<TestClass1>.AllNames.ToList();
 
             // Assert
             Assert.Equal(2, all.Count());
+            Assert.Contains("first",all);
+            Assert.Contains("second", all);
+
         }
     }
 }

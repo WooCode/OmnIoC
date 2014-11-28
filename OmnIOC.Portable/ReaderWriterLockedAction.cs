@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace OmnIoC.Portable
 {
     class ReaderWriterLockedAction
     {
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly ReaderWriterLockSlim _lock;
+
+        public ReaderWriterLockedAction(LockRecursionPolicy lockRecursionPolicy = LockRecursionPolicy.SupportsRecursion)
+        {
+            _lock = new ReaderWriterLockSlim(lockRecursionPolicy);
+        }
 
         public void ExecuteInReadLock(Action action)
         {

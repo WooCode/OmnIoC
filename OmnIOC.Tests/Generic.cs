@@ -167,5 +167,20 @@ namespace OmnIoC.Tests
             Assert.Equal(1, all.Count());
             Assert.True(all.All(t => t.Inner != null));
         }
+
+        [Fact]
+        public void ResolveAllNames()
+        {
+            // Register
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1()); // this one should not be returned
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "first");
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "second");
+
+            // Resolve
+            var all = OmnIoCContainer<TestClass1>.AllNames;
+
+            // Assert
+            Assert.Equal(2, all.Count());
+        }
     }
 }

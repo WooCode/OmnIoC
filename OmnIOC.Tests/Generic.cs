@@ -161,7 +161,7 @@ namespace OmnIoC.Tests
             SetManyTransient();
 
             // Resolve
-            var all = OmnIoCContainer<TestClass2>.AllNamed.ToList();
+            var all = OmnIoCContainer<TestClass2>.All.ToList();
 
             // Assert
             Assert.Equal(1, all.Count());
@@ -177,7 +177,7 @@ namespace OmnIoC.Tests
             OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "second");
 
             // Resolve
-            var all = OmnIoCContainer<TestClass1>.AllNames.ToList();
+            var all = OmnIoCContainer<TestClass1>.Names.ToList();
 
             // Assert
             Assert.Equal(2, all.Count());

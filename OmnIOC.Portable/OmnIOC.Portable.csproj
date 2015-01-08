@@ -41,7 +41,6 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ReaderWriterLockedAction.cs" />
     <Compile Include="OmnIoCAttribute.cs" />
     <Compile Include="Reuse.cs" />
     <Compile Include="IOmnIoCContainer.cs" />

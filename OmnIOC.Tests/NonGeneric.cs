@@ -139,7 +139,7 @@ namespace OmnIoC.Tests
             var test3 = (ITestClass) OmnIoCContainer.GetNamed(_registrationType, "test3");
             var test3_2 = (ITestClass) OmnIoCContainer.GetNamed(_registrationType, "test3");
 
-            var all = OmnIoCContainer<ITestClass>.AllNamed;
+            var all = OmnIoCContainer<ITestClass>.All;
 
             // Assert
             Assert.NotNull(test1);

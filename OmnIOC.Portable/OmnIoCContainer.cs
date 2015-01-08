@@ -54,8 +54,9 @@ namespace OmnIoC.Portable
         #endregion
 
         private static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-        private static readonly ReaderWriterLockedAction _lock = new ReaderWriterLockedAction();
         private static Func<RegistrationType> _defaultFactory = () => default(RegistrationType);
+        private static readonly object _syncLock = new object();
+
 
         /// <summary>
         ///     The main registration (unamed registration) or default of (<see cref="RegistrationType" />)
@@ -77,15 +78,15 @@ namespace OmnIoC.Portable
         /// <summary>
         ///     Get all registered instances for <see cref="RegistrationType" />
         /// </summary>
-        public static IEnumerable<RegistrationType> AllNamed
+        public static IEnumerable<RegistrationType> All
         {
             get { return _namedCollection.Values.Select(f => f()); }
         }
 
         /// <summary>
-        ///     Get all names that is registered for <see cref="RegistrationType" />
+        ///     Get all names that are registered for <see cref="RegistrationType" />
         /// </summary>
-        public static IEnumerable<string> AllNames
+        public static IEnumerable<string> Names
         {
             get { return _namedCollection.Keys; }
         }
@@ -117,7 +118,7 @@ namespace OmnIoC.Portable
 
         public static void Remove(string name)
         {
-            _lock.ExecuteInWriteLock(() =>
+            lock(_syncLock)
             {
                 if (name != null && _namedCollection.ContainsKey(name))
                 {
@@ -125,12 +126,13 @@ namespace OmnIoC.Portable
                     newCollection.Remove(name);
                     _namedCollection = newCollection;
                 }
-            });
+            }
         }
 
         public static void Clear()
         {
-            _lock.ExecuteInWriteLock(SetDefaults);
+            lock(_syncLock)
+                SetDefaults();
         }
 
         /// <summary>
@@ -153,13 +155,13 @@ namespace OmnIoC.Portable
                 return;
             }
 
-            _lock.ExecuteInWriteLock(() =>
+            lock(_syncLock)
             {
                 // Safely copy the old dictionary to new one and add the factory
                 var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection, StringComparer.OrdinalIgnoreCase);
                 newCollection[name] = factory;
                 _namedCollection = newCollection;
-            });
+            }
         }
 
         /// <summary>

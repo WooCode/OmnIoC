@@ -139,7 +139,7 @@ namespace OmnIoC.Tests
             var test3 = (ITestClass) OmnIoCContainer.GetNamed(_registrationType, "test3");
             var test3_2 = (ITestClass) OmnIoCContainer.GetNamed(_registrationType, "test3");
 
-            var all = OmnIoCContainer<ITestClass>.All();
+            var all = OmnIoCContainer<ITestClass>.All;
 
             // Assert
             Assert.NotNull(test1);
@@ -165,7 +165,7 @@ namespace OmnIoC.Tests
             var all = OmnIoCContainer.All(_registrationType).Select(o => (ITestClass)o).ToList();
 
             // Assert
-            Assert.Equal(all.Count(), 4);
+            Assert.Equal(all.Count(), 3);
             Assert.True(all.All(o => o != null));
         }
     }

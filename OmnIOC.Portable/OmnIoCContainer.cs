@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-// ReSharper disable InconsistentNaming
+
 // ReSharper disable StaticFieldInGenericType
 
 namespace OmnIoC.Portable
@@ -15,7 +15,7 @@ namespace OmnIoC.Portable
         #region IOmnIoCContainer members
 
         object IOmnIoCContainer.Get()
-        {           
+        {
             return Get();
         }
 
@@ -54,17 +54,41 @@ namespace OmnIoC.Portable
         #endregion
 
         private static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
+        private static Func<RegistrationType> _defaultFactory = () => default(RegistrationType);
         private static readonly object _syncLock = new object();
+
 
         /// <summary>
         ///     The main registration (unamed registration) or default of (<see cref="RegistrationType" />)
         /// </summary>
-        public static Func<RegistrationType> Get = () => default(RegistrationType);
+        public static Func<RegistrationType> Get = () => _defaultFactory.Invoke();
 
         static OmnIoCContainer()
         {
             OmnIoCContainer.ClearAll += Clear;
             SetDefaults();
+        }
+
+        public static Func<RegistrationType> DefaultValueFactory
+        {
+            get { return _defaultFactory; }
+            set { _defaultFactory = value; }
+        }
+
+        /// <summary>
+        ///     Get all registered instances for <see cref="RegistrationType" />
+        /// </summary>
+        public static IEnumerable<RegistrationType> All
+        {
+            get { return _namedCollection.Values.Select(f => f()); }
+        }
+
+        /// <summary>
+        ///     Get all names that are registered for <see cref="RegistrationType" />
+        /// </summary>
+        public static IEnumerable<string> Names
+        {
+            get { return _namedCollection.Keys; }
         }
 
         private static void SetDefaults()
@@ -80,11 +104,11 @@ namespace OmnIoC.Portable
 
             if (type.IsInterface || type.IsAbstract || ctor == null)
             {
-                Get = () => default(RegistrationType);
+                Get = () => _defaultFactory.Invoke();
                 return;
             }
 
-            var parameters = ctor.GetParameters().ToArray();
+            var parameters = ctor.GetParameters();
 
             if (parameters.Length == 0)
                 Get = Activator.CreateInstance<RegistrationType>;
@@ -92,12 +116,23 @@ namespace OmnIoC.Portable
                 Get = () => (RegistrationType) ctor.Invoke(parameters.Select(p => OmnIoCContainer.Get(p.ParameterType)).ToArray());
         }
 
+        public static void Remove(string name)
+        {
+            lock(_syncLock)
+            {
+                if (name != null && _namedCollection.ContainsKey(name))
+                {
+                    var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection, StringComparer.OrdinalIgnoreCase);
+                    newCollection.Remove(name);
+                    _namedCollection = newCollection;
+                }
+            }
+        }
+
         public static void Clear()
         {
-            lock (_syncLock)
-            {
+            lock(_syncLock)
                 SetDefaults();
-            }
         }
 
         /// <summary>
@@ -105,15 +140,8 @@ namespace OmnIoC.Portable
         /// </summary>
         public static RegistrationType GetNamed(string name)
         {
-            return _namedCollection[name].Invoke();
-        }
-
-        /// <summary>
-        ///     Get all registered instances for <see cref="RegistrationType" />
-        /// </summary>
-        public static IEnumerable<RegistrationType> All()
-        {
-            return _namedCollection.Values.Select(f => f());
+            var collection = _namedCollection;
+            return collection.ContainsKey(name) ? collection[name].Invoke() : _defaultFactory.Invoke();
         }
 
         /// <summary>
@@ -121,13 +149,14 @@ namespace OmnIoC.Portable
         /// </summary>
         public static void Set(Func<RegistrationType> factory, string name = null)
         {
-            lock (_syncLock)
+            if (name == null)
             {
-                if (name == null)
-                {
-                    Get = factory;
-                    name = string.Empty;
-                }
+                Get = factory;
+                return;
+            }
+
+            lock(_syncLock)
+            {
                 // Safely copy the old dictionary to new one and add the factory
                 var newCollection = new Dictionary<string, Func<RegistrationType>>(_namedCollection, StringComparer.OrdinalIgnoreCase);
                 newCollection[name] = factory;
@@ -157,4 +186,3 @@ namespace OmnIoC.Portable
 }
 
 // ReSharper restore StaticFieldInGenericType
-// ReSharper restore InconsistentNaming

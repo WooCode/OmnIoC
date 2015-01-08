@@ -4,7 +4,7 @@
     only:
       - develop
 
-  version: "0.1.{build}"
+  version: "0.3.{build}"
 
   # enable patching of AssemblyInfo.* files
   assembly_info:
@@ -35,14 +35,12 @@
       template: |
           <{{buildUrl}}|Build {{projectName}} {{buildVersion}} {{status}}> 
           <{{commitUrl}}|{{commitMessage}}> by {{commitAuthor}} on {{commitDate}}
-      on_build_success: true
-      on_build_failure: true
 -
   branches:
     only:
       - master
 
-  version: "0.1.{build}"
+  version: "0.2.{build}"
 
   # enable patching of AssemblyInfo.* files
   assembly_info:

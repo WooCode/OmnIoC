@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using OmnIoC.Portable;
 using Xunit;
@@ -10,6 +11,20 @@ namespace OmnIoC.Tests
         public Generic()
         {
             OmnIoCContainer.Clear();
+        }
+
+        [Fact]
+        public void RemoveShouldRemoveRegistrated()
+        {
+            OmnIoCContainer<int>.DefaultValueFactory = () => 33;
+            // Register
+            OmnIoCContainer<int>.Set(10, "Test");
+
+            // Act
+            OmnIoCContainer<int>.Remove("Test");
+
+            // Assert
+            Assert.Equal(33,OmnIoCContainer<int>.GetNamed("Test"));
         }
 
         [Fact]
@@ -146,12 +161,29 @@ namespace OmnIoC.Tests
             SetManyTransient();
 
             // Resolve
-            var all = OmnIoCContainer<TestClass2>.All().ToList();
+            var all = OmnIoCContainer<TestClass2>.All.ToList();
 
             // Assert
-            Assert.Equal(all.Count(), 2);
+            Assert.Equal(1, all.Count());
             Assert.True(all.All(t => t.Inner != null));
-            Assert.False(all.First().Inner == all.Last().Inner);
+        }
+
+        [Fact]
+        public void ResolveAllNames()
+        {
+            // Register
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1()); // this one should not be returned
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "first");
+            OmnIoCContainer<TestClass1>.Set(() => new TestClass1(), "second");
+
+            // Resolve
+            var all = OmnIoCContainer<TestClass1>.Names.ToList();
+
+            // Assert
+            Assert.Equal(2, all.Count());
+            Assert.Contains("first",all);
+            Assert.Contains("second", all);
+
         }
     }
 }

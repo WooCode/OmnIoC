@@ -1,4 +1,4 @@
-OmnIoC [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/develop)
+OmnIoC [![Build status](https://ci.appveyor.com/api/projects/status/bf0uai6rj4octbbn/branch/develop)](https://ci.appveyor.com/project/WooCode/OmnIoC/branch/develop) [![NuGet](https://img.shields.io/nuget/v/OmnIoC.Portable.svg?style=flat-square)]()
 ===
 Portable Class Library Ioc that is **fast** and works in
 

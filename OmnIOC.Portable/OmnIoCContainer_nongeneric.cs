@@ -59,9 +59,6 @@ namespace OmnIoC.Portable
 
                 foreach (var attr in attributes)
                 {
-                    if (!attr.RegistrationType.IsAssignableFrom(type))
-                        throw new Exception(string.Format("{0} is not assignable from {1}", attr.RegistrationType.Name, type.Name));
-
                     Set(attr.RegistrationType, type, attr.Reuse, attr.Name);
                 }
             }

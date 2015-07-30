@@ -21,17 +21,12 @@ namespace OmnIoC.Tests
         public void ResolveWithoutRegistration()
         {
             // Resolve
-            var test = (TestClass)OmnIoCContainer.Get(typeof(TestClass));
+            var testClass = (TestClass)OmnIoCContainer.Get(typeof(TestClass));
+            var testValueType = (int)OmnIoCContainer.Get(typeof(int));
 
             // Assert
-            Assert.NotNull(test);
-            Assert.NotNull(test.Inner);
-
-            Assert.NotNull(test.Inner2);
-            Assert.NotNull(test.Inner2.Inner);
-
-            Assert.NotNull(test.Inner3);
-            Assert.NotNull(test.Inner3.Inner);
+            Assert.Null(testClass);
+            Assert.Equal(0, testValueType);
         }
 
         [Fact]
@@ -167,6 +162,12 @@ namespace OmnIoC.Tests
             // Assert
             Assert.Equal(all.Count(), 3);
             Assert.True(all.All(o => o != null));
+        }
+
+        [Fact]
+        public void NotAssignableShouldThrow()
+        {
+            Assert.Throws<Exception>(() => OmnIoCContainer.Set(typeof(int),typeof(string)));
         }
     }
 }

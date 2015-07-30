@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-
-
-// ReSharper disable StaticFieldInGenericType
 
 namespace OmnIoC.Portable
 {
     /// <summary>
     ///     Generic container that holds registrations for type(s)
     /// </summary>
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
     public sealed class OmnIoCContainer<RegistrationType> : IOmnIoCContainer
     {
         #region IOmnIoCContainer members
@@ -32,6 +32,9 @@ namespace OmnIoC.Portable
         /// <param name="name"></param>
         void IOmnIoCContainer.Set(Type implementationType, Reuse reuse, string name)
         {
+            if (!_registrationType.IsAssignableFrom(implementationType))
+                throw new Exception(string.Format("{0} is not assignable from {1}", _registrationType.Name, implementationType.Name));
+
             switch (reuse)
             {
                 case Reuse.Multiple:
@@ -56,6 +59,7 @@ namespace OmnIoC.Portable
         private static Dictionary<string, Func<RegistrationType>> _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
         private static Func<RegistrationType> _defaultFactory = () => default(RegistrationType);
         private static readonly object _syncLock = new object();
+        private static readonly Type _registrationType = typeof (RegistrationType);
 
 
         /// <summary>
@@ -94,26 +98,8 @@ namespace OmnIoC.Portable
         private static void SetDefaults()
         {
             _namedCollection = new Dictionary<string, Func<RegistrationType>>(StringComparer.OrdinalIgnoreCase);
-
-            var type = typeof (RegistrationType);
-            // Find the constructor that has the most parameters that we can supply
-            var ctor = type.GetConstructors()
-                .Where(c => !c.GetParameters().Any(p => p.ParameterType.IsAbstract || p.ParameterType.IsInterface || p.ParameterType.IsGenericType))
-                .OrderByDescending(c => c.GetParameters().Length)
-                .FirstOrDefault();
-
-            if (type.IsInterface || type.IsAbstract || ctor == null)
-            {
-                Get = () => _defaultFactory.Invoke();
-                return;
-            }
-
-            var parameters = ctor.GetParameters();
-
-            if (parameters.Length == 0)
-                Get = Activator.CreateInstance<RegistrationType>;
-            else
-                Get = () => (RegistrationType) ctor.Invoke(parameters.Select(p => OmnIoCContainer.Get(p.ParameterType)).ToArray());
+            Get = () => _defaultFactory.Invoke();
+            _defaultFactory = () => default(RegistrationType);
         }
 
         public static void Remove(string name)
@@ -184,5 +170,3 @@ namespace OmnIoC.Portable
         }
     }
 }
-
-// ReSharper restore StaticFieldInGenericType
